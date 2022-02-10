@@ -1,4 +1,5 @@
-from typing import Type, Union
+from typing import Type
+
 from .base import Resource
 
 
@@ -27,7 +28,7 @@ class ResourceRegistry(metaclass=ResourceRegistryMeta):
     """
     ResourceRegistry contains information about all CB resource classes
         ResourceRegistry.Organization will return class that represents Organization
-        ResourceRegistry.Person returns a CB Person class
+        ResourceRegistry.Person returns a Person class
 
     _NAME_MAP: holds a map between resource names and respective classes
         _NAME_MAP = {
@@ -47,6 +48,24 @@ class ResourceRegistry(metaclass=ResourceRegistryMeta):
 
         'Organization': ('organizations', 'organization'),
         'Person': ('people', 'person'),
+        'FundingRound': ('funding_rounds', 'funding_round'),
+        'Acquisition': ('acquisitions', 'acquisition'),
+        'Investment': ('investments', 'investment'),
+        'Event': ('events', 'event'),
+        'PressReference': ('press_references', 'press_reference'),
+        'Fund': ('funds', 'fund'),
+        'EventAppearance': ('event_appearances', 'event_appearance'),
+        'Ipo': ('ipos', 'ipo'),
+        'Ownership': ('ownerships', 'ownership'),
+        'Category': ('categories', 'category'),
+        'CategoryGroup': ('category_groups', 'category_group'),
+        'Location': ('locations', 'location'),
+        'Job': ('jobs', 'job'),
+        'KeyEmployeeChange': ('key_employee_changes', 'key_employee_change'),
+        'Layoff': ('layoffs', 'layoff'),
+        'Address': ('addresses', 'address'),
+        'Degree': ('degrees', 'degree'),
+        'Principal': ('principals', 'principal'),
     }
 
     _ENTITY_ID_MAP = {}

@@ -46,27 +46,74 @@ class PyCrunchbase:
     Example # 3: Autocomplete
 
     """
+    SEARCH_API_METHOD_PREFIX = 'search_'
+    ENTITIES_API_METHOD_SUFFIX = '_api'
+
+    # The keys of this dict with SEARCH_API_METHOD_PREFIX represent search APIs. i.e.
+    # search_organizations() or search_people()
+    SEARCH_APIS = {
+        'organizations': CBR.Organization,
+        'people': CBR.Person,
+        'funding_rounds': CBR.FundingRound,
+        'acquisitions': CBR.Acquisition,
+        'investments': CBR.Investment,
+        'events': CBR.Event,
+        'press_references': CBR.PressReference,
+        'funds': CBR.Fund,
+        'event_appearances': CBR.EventAppearance,
+        'ipos': CBR.Ipo,
+        'ownerships': CBR.Ownership,
+        'categories': CBR.Category,
+        'category_groups': CBR.CategoryGroup,
+        'locations': CBR.Location,
+        'jobs': CBR.Job,
+        'key_employee_changes': CBR.KeyEmployeeChange,
+        'layoffs': CBR.Layoff,
+        'addresses': CBR.Address,
+        'degrees': CBR.Degree,
+        'principals': CBR.Principal,
+    }
+
+    # The keys of this dict with ENTITIES_API_METHOD_SUFFIX represent entities APIs. i.e.
+    # organizations_api() or people_api()
+    ENTITY_APIS = {
+        'organizations': CBR.Organization,
+        'people': CBR.Person,
+        'funding_rounds': CBR.FundingRound,
+        'acquisitions': CBR.Acquisition,
+        'investments': CBR.Investment,
+        'events': CBR.Event,
+        'press_references': CBR.PressReference,
+        'funds': CBR.Fund,
+        'event_appearances': CBR.EventAppearance,
+        'ipos': CBR.Ipo,
+        'ownerships': CBR.Ownership,
+        'categories': CBR.Category,
+        'category_groups': CBR.CategoryGroup,
+        'locations': CBR.Location,
+        'jobs': CBR.Job,
+        'addresses': CBR.Address,
+        'degrees': CBR.Degree,
+    }
 
     def __init__(self, api_key: str = None):
         self.api_key = api_key
 
-    # SEARCH APIs
+    def __getattr__(self, name: str):
 
-    def search_organizations(self) -> SearchAPI:
-        return SearchAPI(CBR.Organization, api_key=self.api_key)
+        # check if it's a search api method
+        if name.startswith(self.SEARCH_API_METHOD_PREFIX):
+            api_name = name[len(self.SEARCH_API_METHOD_PREFIX):]
+            if api_name in self.SEARCH_APIS:
+                return lambda: SearchAPI(self.SEARCH_APIS[api_name], api_key=self.api_key)
 
-    def search_people(self) -> SearchAPI:
-        return SearchAPI(CBR.Person, api_key=self.api_key)
+        # check if it's an entities api method
+        if name.endswith(self.ENTITIES_API_METHOD_SUFFIX):
+            api_name = name[:len(self.ENTITIES_API_METHOD_SUFFIX)]
+            if api_name in self.ENTITY_APIS:
+                return lambda: EntitiesAPI(self.ENTITY_APIS[api_name], api_key=self.api_key)
 
-    # AUTOCOMPLETE API
+        raise AttributeError
 
     def autocomplete(self, query: str, *collection_ids) -> AutoCompleteAPI:
         return AutoCompleteAPI(query, *collection_ids, api_key=self.api_key)
-
-    # ENTITIES APIs
-
-    def organizations(self) -> EntitiesAPI:
-        return EntitiesAPI(CBR.Organization, api_key=self.api_key)
-
-    def people(self) -> EntitiesAPI:
-        return EntitiesAPI(CBR.Person, api_key=self.api_key)

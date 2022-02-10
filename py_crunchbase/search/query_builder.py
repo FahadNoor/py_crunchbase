@@ -65,10 +65,6 @@ class QueryBuilder:
         self.next_id = None
         self.previous_id = None
 
-    def _validate_field(self, field: str):
-        if field not in self.resource.AVAILABLE_FIELDS:
-            raise CrunchbaseAPIException(f'Invalid field: {field}')
-
     def add_fields(self, names):
         if len(names) == 0:
             raise CrunchbaseAPIException('Field names cannot be empty')
@@ -84,15 +80,12 @@ class QueryBuilder:
         except ValueError:
             raise CrunchbaseAPIException('Field and Operator should be provided in filed__operator format.')
 
-        self._validate_field(field)
-
         if operator not in OPERATORS:
             raise CrunchbaseAPIException(f'Invalid operator: {operator}')
 
         self.queries.append((field, operator, convert_value(value)))
 
     def add_order(self, field: str, sort: str):
-        self._validate_field(field)
         self.order.append((field, sort))
 
     def add_limit(self, value: int):

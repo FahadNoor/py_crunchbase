@@ -11,7 +11,7 @@ class Resource(DataDict):
     ENTITY_DEF_ID = ''
 
     def __init__(self, data: dict, uuid: str = None, cards: dict = None):
-        self._original_response = data
+        self._original_resource_data = data
         self.uuid = uuid or data.get('uuid')
         cards = cards or data.get('cards')
         self.cards = DataDict(cards) if isinstance(cards, dict) else cards
