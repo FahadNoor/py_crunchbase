@@ -1,7 +1,5 @@
-from .resources import CBR
-from .search import SearchAPI
-from .autocomplete import AutoCompleteAPI
-from .entities import EntitiesAPI
+from .apis import SearchAPI, AutoCompleteAPI, EntitiesAPI
+from .entities import ER
 
 
 class PyCrunchbase:
@@ -51,49 +49,13 @@ class PyCrunchbase:
 
     # The keys of this dict with SEARCH_API_METHOD_PREFIX represent search APIs. i.e.
     # search_organizations() or search_people()
-    SEARCH_APIS = {
-        'organizations': CBR.Organization,
-        'people': CBR.Person,
-        'funding_rounds': CBR.FundingRound,
-        'acquisitions': CBR.Acquisition,
-        'investments': CBR.Investment,
-        'events': CBR.Event,
-        'press_references': CBR.PressReference,
-        'funds': CBR.Fund,
-        'event_appearances': CBR.EventAppearance,
-        'ipos': CBR.Ipo,
-        'ownerships': CBR.Ownership,
-        'categories': CBR.Category,
-        'category_groups': CBR.CategoryGroup,
-        'locations': CBR.Location,
-        'jobs': CBR.Job,
-        'key_employee_changes': CBR.KeyEmployeeChange,
-        'layoffs': CBR.Layoff,
-        'addresses': CBR.Address,
-        'degrees': CBR.Degree,
-        'principals': CBR.Principal,
-    }
+    SEARCH_APIS = {entity.API_PATH: entity for entity in ER.all()}
 
     # The keys of this dict with ENTITIES_API_METHOD_SUFFIX represent entities APIs. i.e.
     # organizations_api() or people_api()
     ENTITY_APIS = {
-        'organizations': CBR.Organization,
-        'people': CBR.Person,
-        'funding_rounds': CBR.FundingRound,
-        'acquisitions': CBR.Acquisition,
-        'investments': CBR.Investment,
-        'events': CBR.Event,
-        'press_references': CBR.PressReference,
-        'funds': CBR.Fund,
-        'event_appearances': CBR.EventAppearance,
-        'ipos': CBR.Ipo,
-        'ownerships': CBR.Ownership,
-        'categories': CBR.Category,
-        'category_groups': CBR.CategoryGroup,
-        'locations': CBR.Location,
-        'jobs': CBR.Job,
-        'addresses': CBR.Address,
-        'degrees': CBR.Degree,
+        entity.API_PATH: entity for entity in ER.all()
+        if entity not in (ER.KeyEmployeeChange, ER.Layoff, ER.Principal)
     }
 
     def __init__(self, api_key: str = None):

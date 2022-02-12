@@ -1,8 +1,8 @@
 import os.path
 from typing import Union, Type
 
-from ..base import CrunchbaseAPI
-from ..resources import Resource
+from .base import CrunchbaseAPI
+from ..entities import Entity
 from ..utils import DataDict
 
 
@@ -11,12 +11,12 @@ class EntitiesAPI(CrunchbaseAPI):
     ENTITIES_PATH = 'entities'
     CARDS_PATH = 'cards'
 
-    def __init__(self, resource: Type[Resource], api_key: str = None):
+    def __init__(self, resource: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)
         self.resource = resource
 
     def _get_entity_id(self, entity) -> str:
-        if not isinstance(entity, Resource):
+        if not isinstance(entity, Entity):
             return entity
         if not isinstance(entity, self.resource):
             raise self.Exception(f'Entity should be an instance of {self.resource.__name__}')
@@ -33,7 +33,7 @@ class EntitiesAPI(CrunchbaseAPI):
             path = os.path.join(path, self.CARDS_PATH, card_id)
         return path
 
-    def get(self, entity: Union[str, Resource], *field_ids: str, card_ids: Union[list, str] = None) -> Resource:
+    def get(self, entity: Union[str, Entity], *field_ids: str, card_ids: Union[list, str] = None) -> Entity:
 
         entity_id = self._get_entity_id(entity)
         params = {}
@@ -45,10 +45,13 @@ class EntitiesAPI(CrunchbaseAPI):
         path = self._get_path(entity_id)
         return self.resource(self.send_request(path, params=params or None))
 
-    def get_with_card(self, entity: Union[str, Resource], card: Union[DataDict, str] = None, *card_field_ids: str):
+    def get_with_card(self, entity: Union[str, Entity], card: Union[DataDict, str] = None, *card_field_ids: str):
 
         entity_id = self._get_entity_id(entity)
         card_id = self._get_card_id(card)
         params = {'card_field_ids': card_field_ids} if card_field_ids else None
         path = self._get_path(entity_id, card_id)
         return self.resource(self.send_request(path, params=params))
+
+
+__all__ = ['EntitiesAPI']

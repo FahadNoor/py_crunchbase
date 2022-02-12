@@ -1,2 +1,2 @@
-from .base import CrunchbaseAPIException
-from .api import PyCrunchbase
+from .apis import CrunchbaseAPIException
+from .main import PyCrunchbase

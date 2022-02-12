@@ -1,16 +1,16 @@
 from typing import Type, List
 
-from .query_builder import QueryBuilder
-from ..base import CrunchbaseAPI
-from ..resources import Resource
+from .base import CrunchbaseAPI
+from ..entities import Entity
+from ..query_builder import QueryBuilder
 
 
 class SearchAPI(CrunchbaseAPI):
 
     query_builder_cls = QueryBuilder
-    ALL_FIELDS = query_builder_cls.ALL_FIELDS
+    DEFAULT_FIELDS = query_builder_cls.DEFAULT_FIELDS
 
-    def __init__(self, resource: Type[Resource], api_key: str = None):
+    def __init__(self, resource: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)
         self.path = f'searches/{resource.API_PATH}'
         self.query_builder = self.query_builder_cls(resource)
@@ -39,17 +39,17 @@ class SearchAPI(CrunchbaseAPI):
         self.query_builder.add_limit(value)
         return self
 
-    def add_next(self, resources: List[Type[Resource]]):
+    def add_next(self, resources: List[Type[Entity]]):
         if resources:
             self.query_builder.add_next(resources[-1].uuid)
 
-    def add_previous(self, resources: List[Type[Resource]]):
+    def add_previous(self, resources: List[Type[Entity]]):
         if resources:
             self.query_builder.add_previous(resources[0].uuid)
 
     def execute_search(self) -> list:
         """
-        returns list of resources returned by request
+        returns list of entities returned by request
         """
         data = self.send_request(self.path, method_name='post', payload=self.query_builder.build())
         return [self.resource(entity) for entity in data['entities']]
@@ -93,3 +93,6 @@ class Paginator:
         if not data:
             raise StopIteration
         return data
+
+
+__all__ = ['SearchAPI']

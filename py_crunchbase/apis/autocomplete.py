@@ -1,4 +1,4 @@
-from ..base import CrunchbaseAPI
+from .base import CrunchbaseAPI
 from ..utils import DataDict
 
 
@@ -23,3 +23,6 @@ class AutoCompleteAPI(CrunchbaseAPI):
 
         data = self.send_request(self.AUTOCOMPLETE_PATH, params=params)
         return [DataDict(entity) for entity in data['entities']]
+
+
+__all__ = ['AutoCompleteAPI']

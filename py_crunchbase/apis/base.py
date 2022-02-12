@@ -55,3 +55,6 @@ class CrunchbaseAPI:
             return data
 
         raise self.Exception(extract_error_info(data) or response.reason)
+
+
+__all__ = ['CrunchbaseAPIException', 'CrunchbaseAPI']

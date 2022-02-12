@@ -1,8 +1,8 @@
 from typing import Type
 
-from ..base import CrunchbaseAPIException
-from ..resources import Resource
-from ..utils import is_iterable
+from .apis import CrunchbaseAPIException
+from .entities import Entity
+from .utils import is_iterable
 
 OPERATORS = {
     'eq', 'contains', 'not_includes', 'lte', 'starts', 'domain_eq', 'gt', 'not_contains', 'not_eq', 'between',
@@ -10,17 +10,16 @@ OPERATORS = {
 }
 
 
-def convert_value(value):
+def convert_value(obj):
     """
     given any value (str, list[str], QueryValue, list[QueryValue],
     returns a QueryListValue
     """
-    if is_iterable(value):
-        return QueryListValue([
-            value if isinstance(value, QueryValue) else QueryValue(value)
-            for value in value
-        ])
-    return QueryListValue([value if isinstance(value, QueryValue) else QueryValue(value)])
+    obj_list = obj if is_iterable(obj) else [obj]
+    return QueryListValue([
+        obj_ if isinstance(obj_, QueryValue) else QueryValue(obj_)
+        for obj_ in obj_list
+    ])
 
 
 class QueryValue:
@@ -54,9 +53,9 @@ class QueryListValue(QueryValue):
 
 class QueryBuilder:
 
-    ALL_FIELDS = '__All__'
+    DEFAULT_FIELDS = '__DEFAULT__'
 
-    def __init__(self, resource: Type[Resource]):
+    def __init__(self, resource: Type[Entity]):
         self.resource = resource
         self.fields = []
         self.queries = []
@@ -69,16 +68,18 @@ class QueryBuilder:
         if len(names) == 0:
             raise CrunchbaseAPIException('Field names cannot be empty')
 
-        if names[0] == self.ALL_FIELDS:
-            self.fields.extend(self.resource.AVAILABLE_FIELDS)
+        if names[0] == self.DEFAULT_FIELDS:
+            self.fields.extend(self.resource.DEFAULT_FIELDS)
         else:
             self.fields.extend(names)
 
     def add_query(self, field__operator: str, value):
         try:
             field, operator = field__operator.split('__')
-        except ValueError:
-            raise CrunchbaseAPIException('Field and Operator should be provided in filed__operator format.')
+        except ValueError as exe:
+            raise CrunchbaseAPIException(
+                'Field and Operator should be provided in filed__operator format.'
+            ) from exe
 
         if operator not in OPERATORS:
             raise CrunchbaseAPIException(f'Invalid operator: {operator}')
