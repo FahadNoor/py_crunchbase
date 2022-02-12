@@ -17,13 +17,13 @@ class PyCrunchbase:
 
     # get all companies at once
     try:
-        companies = search_api.execute_search()
+        companies = search_api.execute()
     except search_api.Exception as exc:
         raise
 
     # or through pagination
     try:
-        for page in search_api.search():
+        for page in search_api.iterate():
             for company in page:
                 print(company.uuid)
     except search_api.Exception as exc:
@@ -35,7 +35,7 @@ class PyCrunchbase:
     search_api = pycb.search_people()
     search_api.select('name', 'facebook', 'linkedin', 'twitter').where(uuid__includes=uuids).limit(100)
     try:
-        people = search_api.execute_search()
+        people = search_api.execute()
     except search_api.Exception as exc:
         raise
 

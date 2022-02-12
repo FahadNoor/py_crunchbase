@@ -1,4 +1,5 @@
 import configparser
+import os
 from pathlib import Path
 from typing import Type, Dict
 
@@ -7,8 +8,11 @@ from .base import Entity, EntityBuilder
 
 def build_entities() -> Dict[str, Type[Entity]]:
     config = configparser.ConfigParser()
-    config_path = Path(__file__).parent / 'entities.ini'
-    config.read(config_path)
+    config_paths = [Path(__file__).parent / 'entities.ini']
+    custom_config_path = os.getenv('PY_CRUNCHBASE_ENTITIES_CONFIG')
+    if custom_config_path:
+        config_paths.append(custom_config_path)
+    config.read(config_paths)
     return {
         entity_name: EntityBuilder(entity_name, **config[entity_name]).build()
         for entity_name in config.sections()
@@ -42,12 +46,12 @@ class EntityRegistry(metaclass=EntityRegistryMeta):
     @classmethod
     def get_entity_by_id(cls, entity_def_id: str) -> Type[Entity]:
         """
-        returns resource class by its entity_def_id
+        returns entity class by its entity_def_id
         """
-        resource = cls.ID_ENTITY_MAP.get(entity_def_id)
-        if resource is None:
+        entity = cls.ID_ENTITY_MAP.get(entity_def_id)
+        if entity is None:
             raise ValueError(f"Entity with ID {entity_def_id} doesn't exist.")
-        return resource
+        return entity
 
     @classmethod
     def all(cls):

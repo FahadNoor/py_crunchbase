@@ -55,8 +55,8 @@ class QueryBuilder:
 
     DEFAULT_FIELDS = '__DEFAULT__'
 
-    def __init__(self, resource: Type[Entity]):
-        self.resource = resource
+    def __init__(self, entity: Type[Entity]):
+        self.entity = entity
         self.fields = []
         self.queries = []
         self.order = []
@@ -69,7 +69,7 @@ class QueryBuilder:
             raise CrunchbaseAPIException('Field names cannot be empty')
 
         if names[0] == self.DEFAULT_FIELDS:
-            self.fields.extend(self.resource.DEFAULT_FIELDS)
+            self.fields.extend(self.entity.DEFAULT_FIELDS)
         else:
             self.fields.extend(names)
 

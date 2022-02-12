@@ -32,7 +32,7 @@ class Entity(DataDict):
     FACET_IDS = tuple()
 
     def __init__(self, data: dict, uuid: str = None, cards: dict = None):
-        self._original_resource_data = data
+        self._original_entity_data = data
         self.uuid = uuid or data.get('uuid')
         cards = cards or data.get('cards')
         self.cards = DataDict(cards) if isinstance(cards, dict) else cards
