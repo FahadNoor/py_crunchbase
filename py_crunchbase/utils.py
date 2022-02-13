@@ -1,6 +1,24 @@
 from collections.abc import Iterable
 
 
+def is_iterable(obj) -> bool:
+    """
+    returns true if object is iterable (False for str)
+    """
+    if isinstance(obj, str):
+        return False
+    if isinstance(obj, Iterable):
+        return True
+    return False
+
+
+def comma_spr_str_to_list(value: str) -> list:
+    """
+    converts comma separated str to a list
+    """
+    return ''.join(value.split()).split(',')
+
+
 class Falsy:
     """
     It's boolean check will always be false
@@ -26,17 +44,6 @@ class Falsy:
         return False
 
 
-def is_iterable(obj) -> bool:
-    """
-    returns true if object is iterable (False for str)
-    """
-    if isinstance(obj, str):
-        return False
-    if isinstance(obj, Iterable):
-        return True
-    return False
-
-
 def transform_to_data_dict(data):
 
     if isinstance(data, dict):
@@ -53,7 +60,7 @@ class DataDict(dict):
     This is a wrapper over dict to access values through dot annotation
 
     if value is a string/int, it will be returned as it is
-    if value is a dict, a new DataDict will be returned with the dict as data
+    if value is a dict, a new DataDict will be returned with the value as data
     if value is a list, a new list will be returned with values as DataDict
 
     if no value is found on any given key, falsy object is returned
@@ -70,6 +77,13 @@ class DataDict(dict):
         company.locations              # ['US', 'Canada']
         company.funding.value          # 200000
         company.employees[0].name      # 'John'
+
+        # DataDict is a inheriting from dict class. Means it's instance can be used just like a normal dict i.e.
+
+        company['name']                 # 'A company'
+        company.get('locations')        # ['US', 'Canada']
+        company.get('invalid_key')      # None
+
     """
     def __init__(self, data: dict):
         self._original_data = data

@@ -1,24 +1,26 @@
+from abc import ABCMeta
 from pydoc import locate
-from typing import Iterable
 
-from ..utils import DataDict
+from ..utils import DataDict, comma_spr_str_to_list
 
 
-class CollectionMeta(type):
+class CollectionMeta(ABCMeta):
+
+    def __new__(mcs, cls_name, bases, dict_, **kwargs):
+        dict_['_name'] = dict_.pop('name')
+        facet_name = dict_.pop('facet_name')
+        dict_.update({id_: f'{facet_name}.{id_}' for id_ in dict_.pop('facet_ids')})
+        return super().__new__(mcs, cls_name, bases, dict_, **kwargs)
 
     def __str__(cls):
         return cls._name
 
 
-class Collection(metaclass=CollectionMeta):
+class CardMeta(ABCMeta):
 
-    def __init__(self, name: str, facet_name: str, facet_ids: Iterable):
-        self._name = name
-        for id_ in facet_ids:
-            setattr(self, id_, f'{facet_name}.{id_}')
-
-    def __str__(self):
-        return self._name
+    def __new__(mcs, cls_name, bases, dict_, **kwargs):
+        dict_.update({id_: id_ for id_ in dict_.pop('card_ids')})
+        return super().__new__(mcs, cls_name, bases, dict_, **kwargs)
 
 
 class Entity(DataDict):
@@ -29,7 +31,9 @@ class Entity(DataDict):
     API_PATH = ''
     ENTITY_DEF_ID = ''
     DEFAULT_FIELDS = tuple()
-    FACET_IDS = tuple()
+
+    Collection = None
+    Card = None
 
     def __init__(self, data: dict, uuid: str = None, cards: dict = None):
         self._original_entity_data = data
@@ -42,10 +46,6 @@ class Entity(DataDict):
     @property
     def cb_web_url(self) -> str:
         return f'https://www.crunchbase.com/{self.ENTITY_DEF_ID}/{self.identifier.permalink}'
-
-    @classmethod
-    def as_collection(cls):
-        return Collection(cls.API_PATH, cls.ENTITY_DEF_ID, cls.FACET_IDS)
 
 
 class EntityBuilder:
@@ -62,16 +62,24 @@ class EntityBuilder:
         self.name = name
         self.api_path = api_path
         self.entity_def_id = entity_def_id
+        self.collection_id = kwargs.get('collection_id')
+        self.card_ids = kwargs.get('card_ids')
         self.facet_ids = kwargs.get('facet_ids')
         self.default_fields = kwargs.get('default_fields')
         self.class_path = kwargs.get('class_path')
 
-    def get_class_attrs(self) -> dict:
+    def get_class_attrs(self, entity_name) -> dict:
         attrs = {'API_PATH': self.api_path, 'ENTITY_DEF_ID': self.entity_def_id}
-        if self.facet_ids:
-            attrs['FACET_IDS'] = tuple(self.facet_ids.split(','))
         if self.default_fields:
-            attrs['DEFAULT_FIELDS'] = tuple(self.default_fields.split(','))
+            attrs['DEFAULT_FIELDS'] = tuple(comma_spr_str_to_list(self.default_fields))
+
+        facet_ids = comma_spr_str_to_list(self.facet_ids) if self.facet_ids else []
+        attrs['Collection'] = CollectionMeta(f'{entity_name}Collection', (), {
+            'name': self.collection_id, 'facet_name': self.entity_def_id, 'facet_ids': facet_ids
+        })
+
+        card_ids = comma_spr_str_to_list(self.card_ids) if self.card_ids else []
+        attrs['Card'] = CardMeta(f'{entity_name}Card', (), {'card_ids': card_ids})
         return attrs
 
     def build_by_custom_cls(self):
@@ -80,7 +88,7 @@ class EntityBuilder:
             raise ValueError(f'{self.class_path} is not a valid class path for {self.name}')
         if not issubclass(cls, Entity):
             raise ValueError(f'{cls.__name__} should be a subclass of {Entity.__name__}')
-        for attr, value in self.get_class_attrs().items():
+        for attr, value in self.get_class_attrs(cls.__name__).items():
             setattr(cls, attr, value)
         return cls
 
@@ -88,4 +96,4 @@ class EntityBuilder:
         if self.class_path:
             return self.build_by_custom_cls()
         else:
-            return type(self.name, (Entity,), self.get_class_attrs())
+            return type(self.name, (Entity,), self.get_class_attrs(self.name))
