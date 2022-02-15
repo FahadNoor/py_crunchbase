@@ -1,10 +1,13 @@
+import copy
 from abc import ABCMeta
+from collections import defaultdict
 from pydoc import locate
+from typing import Dict
 
 from ..utils import DataDict, comma_spr_str_to_list
 
 
-class CollectionMeta(ABCMeta):
+class CollectionEnumMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_, **kwargs):
         dict_['_name'] = dict_.pop('name')
@@ -16,11 +19,33 @@ class CollectionMeta(ABCMeta):
         return cls._name
 
 
-class CardMeta(ABCMeta):
+class CardEnumMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_, **kwargs):
-        dict_.update({id_: id_ for id_ in dict_.pop('card_ids')})
+        card_ids = tuple(dict_.pop('card_ids'))
+        dict_.update({id_: id_ for id_ in card_ids})
+        dict_['_card_ids'] = card_ids
+        dict_['all'] = classmethod(lambda cls: cls._card_ids)
         return super().__new__(mcs, cls_name, bases, dict_, **kwargs)
+
+
+def parse_cards(cards: Dict[str, list]):
+    from .registry import EntityRegistry as ER
+    parsed = defaultdict(list)
+    for name, values in cards.items():
+        if not values:
+            parsed[name] = []
+            continue
+        for card in values:
+            identifier = card.get('identifier', {})
+            entity_def_id = identifier.get('entity_def_id')
+            try:
+                entity_cls = ER.get_entity_by_id(entity_def_id)
+                entity = entity_cls(data={'properties': card}, uuid=identifier.get('uuid'))
+            except ValueError:
+                entity = DataDict(card)
+            parsed[name].append(entity)
+    return parsed
 
 
 class Entity(DataDict):
@@ -35,17 +60,25 @@ class Entity(DataDict):
     Collection = None
     Card = None
 
-    def __init__(self, data: dict, uuid: str = None, cards: dict = None):
-        self._original_entity_data = data
+    def __init__(self, data: dict, uuid: str = None):
+        self._original_entity_data = copy.copy(data)
         self.uuid = uuid or data.get('uuid')
-        cards = cards or data.get('cards')
-        self.cards = DataDict(cards) if isinstance(cards, dict) else cards
         data = data.get('properties', data)
+        self.cards = None
         super().__init__(data)
 
     @property
     def cb_web_url(self) -> str:
         return f'https://www.crunchbase.com/{self.ENTITY_DEF_ID}/{self.identifier.permalink}'
+
+    @classmethod
+    def create_with_cards(cls, data: dict, cards: dict = None):
+        cards = cards or data.pop('cards', {})
+        data = cards.pop('fields', None) or data.get('properties') or data
+        uuid = data.get('identifier', {}).get('uuid')
+        entity = cls(data, uuid)
+        entity.cards = parse_cards(cards) if cards else None
+        return entity
 
 
 class EntityBuilder:
@@ -74,12 +107,14 @@ class EntityBuilder:
             attrs['DEFAULT_FIELDS'] = tuple(comma_spr_str_to_list(self.default_fields))
 
         facet_ids = comma_spr_str_to_list(self.facet_ids) if self.facet_ids else []
-        attrs['Collection'] = CollectionMeta(f'{entity_name}Collection', (), {
+        attrs['Collection'] = CollectionEnumMeta(f'{entity_name}CollectionEnum', (), {
             'name': self.collection_id, 'facet_name': self.entity_def_id, 'facet_ids': facet_ids
         })
 
-        card_ids = comma_spr_str_to_list(self.card_ids) if self.card_ids else []
-        attrs['Card'] = CardMeta(f'{entity_name}Card', (), {'card_ids': card_ids})
+        if self.card_ids:
+            attrs['Card'] = CardEnumMeta(
+                f'{entity_name}CardEnum', (), {'card_ids': comma_spr_str_to_list(self.card_ids)}
+            )
         return attrs
 
     def build_by_custom_cls(self):

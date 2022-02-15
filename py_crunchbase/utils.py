@@ -46,6 +46,9 @@ class Falsy:
 
 def transform_to_data_dict(data):
 
+    if isinstance(data, DataDict):
+        return data
+
     if isinstance(data, dict):
         return DataDict({key: transform_to_data_dict(value) for key, value in data.items()})
 

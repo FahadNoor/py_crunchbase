@@ -71,7 +71,7 @@ class PyCrunchbase:
 
         # check if it's an entities api method
         if name.endswith(self.ENTITIES_API_METHOD_SUFFIX):
-            api_name = name[:len(self.ENTITIES_API_METHOD_SUFFIX)]
+            api_name = name[:-len(self.ENTITIES_API_METHOD_SUFFIX)]
             if api_name in self.ENTITY_APIS:
                 return lambda: EntitiesAPI(self.ENTITY_APIS[api_name], api_key=self.api_key)
 
