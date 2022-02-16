@@ -1,27 +1,26 @@
 from typing import Type, List
 
-from .base import CrunchbaseAPI
-from ..entities import Entity
-from ..paginator import Paginated
-from ..query_builder import QueryBuilder
+from .query_builder import SearchQueryBuilder
+from ..base import CrunchbaseAPI
+from ...entities import Entity
+from ...paginator import Paginated
 
 
 class SearchAPI(CrunchbaseAPI, Paginated):
 
-    query_builder_cls = QueryBuilder
-    DEFAULT_FIELDS = query_builder_cls.DEFAULT_FIELDS
+    query_builder_cls = SearchQueryBuilder
 
-    def __init__(self, entity: Type[Entity], api_key: str = None):
+    def __init__(self, entity_cls: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)
-        self.path = f'searches/{entity.API_PATH}'
-        self.query_builder = self.query_builder_cls(entity)
-        self.entity = entity
+        self.path = f'searches/{entity_cls.API_PATH}'
+        self.query_builder = self.query_builder_cls(entity_cls)
+        self.entity_cls = entity_cls
 
     def reset(self):
         """
         clears the query builder
         """
-        self.query_builder = self.query_builder_cls(self.entity)
+        self.query_builder = self.query_builder_cls(self.entity_cls)
 
     def select(self, *names) -> 'SearchAPI':
         self.query_builder.add_fields(names)
@@ -40,11 +39,11 @@ class SearchAPI(CrunchbaseAPI, Paginated):
         self.query_builder.add_limit(value)
         return self
 
-    def set_next(self, entities: List[Type[Entity]]):
+    def set_next(self, entities: List[Entity]):
         if entities:
             self.query_builder.add_next(entities[-1].uuid)
 
-    def set_previous(self, entities: List[Type[Entity]]):
+    def set_previous(self, entities: List[Entity]):
         if entities:
             self.query_builder.add_previous(entities[0].uuid)
 
@@ -53,7 +52,7 @@ class SearchAPI(CrunchbaseAPI, Paginated):
         returns list of entities returned by request
         """
         data = self.send_request(self.path, method_name='post', payload=self.query_builder.build())
-        return [self.entity(entity) for entity in data['entities']]
+        return [self.entity_cls(entity) for entity in data['entities']]
 
 
 __all__ = ['SearchAPI']
