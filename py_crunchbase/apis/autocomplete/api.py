@@ -1,5 +1,5 @@
-from .base import CrunchbaseAPI
-from ..utils import DataDict
+from ..base import CrunchbaseAPI
+from ...utils import DataDict
 
 
 class AutoCompleteAPI(CrunchbaseAPI):
