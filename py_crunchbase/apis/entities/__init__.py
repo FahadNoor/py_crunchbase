@@ -1,1 +1,1 @@
-from .api import EntitiesAPI
+from .main import EntitiesAPIProxy as EntitiesAPI

@@ -1,10 +1,42 @@
 from abc import ABC
 
 
+class Paginator:
+
+    def __init__(self, api: 'Paginated'):
+        self.api = api
+        self.current_list = None
+
+    def next(self):
+        if self.current_list is not None:
+            self.api.set_next(self.current_list)
+
+        self.current_list = self.api.execute()
+        return self.current_list
+
+    def previous(self):
+        if self.current_list is not None:
+            self.api.set_previous(self.current_list)
+
+        self.current_list = self.api.execute()
+        return self.current_list
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        data = self.next()
+        if not data:
+            raise StopIteration
+        return data
+
+
 class Paginated(ABC):
     """
     This is an interface that should be implemented by the class that needs to provide a paginator.
     """
+
+    paginator_cls = Paginator
 
     def set_next(self, *args, **kwargs):
         """
@@ -34,34 +66,4 @@ class Paginated(ABC):
             for data in page:
                 print(data)
         """
-        return Paginator(self)
-
-
-class Paginator:
-
-    def __init__(self, api: Paginated):
-        self.api = api
-        self.current_list = None
-
-    def next(self):
-        if self.current_list is not None:
-            self.api.set_next(self.current_list)
-
-        self.current_list = self.api.execute()
-        return self.current_list
-
-    def previous(self):
-        if self.current_list is not None:
-            self.api.set_previous(self.current_list)
-
-        self.current_list = self.api.execute()
-        return self.current_list
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        data = self.next()
-        if not data:
-            raise StopIteration
-        return data
+        return self.paginator_cls(self)

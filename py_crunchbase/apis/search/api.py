@@ -12,7 +12,7 @@ class SearchAPI(CrunchbaseAPI, Paginated):
 
     def __init__(self, entity_cls: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)
-        self.path = f'searches/{entity_cls.API_PATH}'
+        self.path = f'searches/{entity_cls.api_path()}'
         self.query_builder = self.query_builder_cls(entity_cls)
         self.entity_cls = entity_cls
 
@@ -52,7 +52,7 @@ class SearchAPI(CrunchbaseAPI, Paginated):
         returns list of entities returned by request
         """
         data = self.send_request(self.path, method_name='post', payload=self.query_builder.build())
-        return [self.entity_cls(entity) for entity in data['entities']]
+        return [self.entity_cls(entity['properties']) for entity in data['entities']]
 
 
 __all__ = ['SearchAPI']

@@ -70,6 +70,7 @@ class Entity(DataDict):
 
     def __init__(self, data: dict):
         self._original_entity_data = copy.copy(data)
+        self.cards = None
         super().__init__(data)
 
     @property
@@ -87,6 +88,10 @@ class Entity(DataDict):
     @property
     def web_url(self) -> str:
         return os.path.join(CB_WEBSITE_URL, self.entity_def_id, self.permalink)
+
+    @classmethod
+    def api_path(cls) -> str:
+        return str(cls.Collection)
 
 
 class EntityProxy:

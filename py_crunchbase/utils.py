@@ -43,6 +43,12 @@ class Falsy:
     def __contains__(self, name):
         return False
 
+    def __len__(self):
+        return 0
+
+    def __iter__(self):
+        return iter(())
+
 
 def transform_to_data_dict(data):
 

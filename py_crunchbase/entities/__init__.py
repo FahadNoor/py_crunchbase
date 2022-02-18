@@ -1,19 +1,10 @@
-from abc import ABCMeta
+from abc import ABC
 from typing import Tuple, Type
 
-from .base import Entity, EntityProxy
+from .base import Entity, EntityProxy, Cards
 
 
-class ERMeta(ABCMeta):
-
-    def __new__(mcs, cls_name, bases, dict_):
-        dict_['all'] = classmethod(
-            lambda cls: tuple(getattr(cls, key) for key, value in dict_.items() if isinstance(value, EntityProxy))
-        )
-        return super().__new__(mcs, cls_name, bases, dict_)
-
-
-class ER(metaclass=ERMeta):
+class ER(ABC):
     """
     This class should be used to access any or all Entity classes
 
@@ -63,4 +54,13 @@ class ER(metaclass=ERMeta):
 
     @classmethod
     def all(cls) -> Tuple[Type[Entity]]:
-        return tuple()
+        # noinspection PyTypeChecker
+        return tuple(getattr(cls, key) for key, value in cls.__dict__.items() if isinstance(value, EntityProxy))
+
+    @classmethod
+    def entity_cls_by_id(cls, entity_def_id: str) -> Type[Entity]:
+        for entity_cls in cls.all():
+            if entity_cls.ENTITY_DEF_ID == entity_def_id:
+                return entity_cls
+
+        raise ValueError(f'No entity class found against {entity_def_id}')
