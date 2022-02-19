@@ -4,6 +4,8 @@ from typing import Union
 
 import requests
 
+from py_crunchbase import constants
+
 
 class CrunchbaseAPIException(Exception):
     pass
@@ -26,8 +28,8 @@ def extract_error_info(data) -> str:
 
 class CrunchbaseAPI:
 
-    API_URL = 'https://api.crunchbase.com/api'
-    API_VERSION = 'v4'
+    API_URL = constants.CB_API_URL
+    API_VERSION = constants.CB_API_VERSION
     Exception = CrunchbaseAPIException
     API_KEY_ENV_VAR = 'PY_CRUNCHBASE_API_KEY'
 
