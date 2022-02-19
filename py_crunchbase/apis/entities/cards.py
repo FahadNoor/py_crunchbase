@@ -8,7 +8,7 @@ from ...query_builder import BaseQueryBuilder
 
 class Paginator(BasePaginator):
 
-    def __next__(self):
+    def __next__(self) -> Entity:
         entity = self.next()
         if not entity or not entity.cards:
             raise StopIteration
@@ -23,7 +23,6 @@ class QueryBuilder(BaseQueryBuilder):
         if self.order:
             params['order'] = ','.join(self.order[0])
         if self.fields:
-            self.fields = list(set(self.fields))
             params['card_field_ids'] = ','.join(self.fields)
 
         return params
@@ -41,16 +40,16 @@ class CardsAPI(BaseEntitiesAPI, Paginated):
         self.entity_id = self._get_entity_id(entity_id)
         self.card_id = card_id
 
-    def select(self, *field_ids: str):
+    def select(self, *field_ids: str) -> 'CardsAPI':
         if field_ids:
             self.query_builder.add_fields(field_ids)
         return self
 
-    def order_by(self, field: str, sort: str = 'asc'):
+    def order_by(self, field: str, sort: str = 'asc') -> 'CardsAPI':
         self.query_builder.add_order(field, sort)
         return self
 
-    def limit(self, value: int):
+    def limit(self, value: int) -> 'CardsAPI':
         self.query_builder.add_limit(value)
         return self
 
@@ -64,7 +63,7 @@ class CardsAPI(BaseEntitiesAPI, Paginated):
         card_list = list(cards.values())[0]
         self.query_builder.add_previous(card_list[0].uuid)
 
-    def execute(self):
+    def execute(self) -> Entity:
         path = self._get_path(self.entity_id, self.card_id)
         return self._parse_response_data(self.send_request(path, params=self.query_builder.build()))
 

@@ -10,7 +10,7 @@ OPERATORS = {
 }
 
 
-def convert_value(obj):
+def convert_value(obj) -> 'QueryListValue':
     """
     given any value (str, list[str], QueryValue, list[QueryValue],
     returns a QueryListValue
@@ -39,7 +39,7 @@ class CurrencyValue(QueryValue):
         super().__init__(value)
         self.currency = currency
 
-    def evaluate(self):
+    def evaluate(self) -> dict:
         return {'value': self.value, 'currency': self.currency}
 
 
@@ -47,7 +47,7 @@ class QueryListValue(QueryValue):
     """
     A helper class to pass list of values
     """
-    def evaluate(self):
+    def evaluate(self) -> list:
         return [value.evaluate() for value in self.value]
 
 
@@ -67,6 +67,7 @@ class SearchQueryBuilder(BaseQueryBuilder):
             self.fields.extend(self.entity_cls.DEFAULT_FIELDS)
         else:
             self.fields.extend(names)
+        self.fields = list(set(self.fields))
 
     def validate_fields(self, names):
         if len(names) == 0:

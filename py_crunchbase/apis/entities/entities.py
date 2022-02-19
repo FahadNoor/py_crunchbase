@@ -15,33 +15,32 @@ class EntitiesAPI(BaseEntitiesAPI):
         self.field_ids = []
         self.card_ids = []
 
-    def select(self, *field_ids: str):
+    def select(self, *field_ids: str) -> 'EntitiesAPI':
         if field_ids:
             if field_ids[0] == self.ALL_FIELDS:
-                self.card_ids.append(Cards.fields)
+                if Cards.fields not in self.card_ids:
+                    self.card_ids.append(Cards.fields)
             else:
-                self.field_ids.extend(field_ids)
+                self.field_ids = list(set(field_ids).union(self.field_ids))
         return self
 
-    def select_all(self):
+    def select_all(self) -> 'EntitiesAPI':
         self.select(self.ALL_FIELDS)
         return self
 
-    def select_cards(self, card_ids: Union[list, str]):
+    def select_cards(self, card_ids: Union[list, str]) -> 'EntitiesAPI':
         if card_ids:
-            card_ids = list(card_ids) if is_iterable(card_ids) else [card_ids]
-            self.card_ids.extend(card_ids)
+            card_ids = set(card_ids) if is_iterable(card_ids) else {card_ids}
+            self.card_ids = list(card_ids.union(self.card_ids))
         return self
 
     def execute(self) -> Entity:
         params = {}
 
         if self.field_ids:
-            self.field_ids = list(set(self.field_ids))
             params['field_ids'] = ','.join(self.field_ids)
 
         if self.card_ids:
-            self.card_ids = list(set(self.card_ids))
             params['card_ids'] = ','.join(self.card_ids)
 
         path = self._get_path(self.entity_id)

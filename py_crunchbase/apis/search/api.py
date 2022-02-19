@@ -23,7 +23,7 @@ class SearchAPI(CrunchbaseAPI, Paginated):
         """
         self.query_builder = self.get_query_builder()
 
-    def get_query_builder(self):
+    def get_query_builder(self) -> SearchQueryBuilder:
         return self.query_builder_cls(self.entity_cls, max_limit=self.MAX_LIMIT)
 
     def select(self, *names) -> 'SearchAPI':
@@ -49,7 +49,7 @@ class SearchAPI(CrunchbaseAPI, Paginated):
     def set_previous(self, entities: List[Entity]):
         self.query_builder.add_previous(entities[0].uuid)
 
-    def execute(self) -> list:
+    def execute(self) -> List[Entity]:
         """
         returns list of entities returned by request
         """

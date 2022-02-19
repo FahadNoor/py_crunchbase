@@ -12,13 +12,6 @@ def is_iterable(obj) -> bool:
     return False
 
 
-def comma_spr_str_to_list(value: str) -> list:
-    """
-    converts comma separated str to a list
-    """
-    return ''.join(value.split()).split(',')
-
-
 class Falsy:
     """
     It's boolean check will always be false

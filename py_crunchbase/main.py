@@ -13,8 +13,8 @@ class PyCrunchbase:
         self.api_key = api_key
 
     # Autocomplete API
-    def autocomplete_api(self, query: str, *collection_ids) -> AutoCompleteAPI:
-        return AutoCompleteAPI(query, *collection_ids, api_key=self.api_key)
+    def autocomplete_api(self) -> AutoCompleteAPI:
+        return AutoCompleteAPI(api_key=self.api_key)
 
     # Deleted Entities API
     def deleted_entities_api(self) -> DeletedEntitiesAPI:

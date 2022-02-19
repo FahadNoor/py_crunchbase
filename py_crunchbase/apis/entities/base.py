@@ -36,7 +36,7 @@ class BaseEntitiesAPI(CrunchbaseAPI):
             raise self.Exception(f'Entity should be an instance of {self.entity_cls.__name__}')
         return entity.uuid or entity.identifier.permalink or ''
 
-    def _get_path(self, entity_id: str, card_id: str = None):
+    def _get_path(self, entity_id: str, card_id: str = None) -> str:
         path = os.path.join(self.ENTITIES_PATH, self.entity_cls.api_path(), entity_id)
         if card_id:
             path = os.path.join(path, self.CARDS_PATH, card_id)

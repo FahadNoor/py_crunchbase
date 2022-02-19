@@ -19,7 +19,7 @@ class BaseQueryBuilder:
 
     def add_fields(self, names):
         self.validate_fields(names)
-        self.fields.extend(names)
+        self.fields = list(set(names).union(self.fields))
 
     def add_order(self, field: str, sort: str):
         self.order.append((field, sort))

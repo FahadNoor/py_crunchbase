@@ -31,23 +31,23 @@ class DeletedEntitiesAPI(CrunchbaseAPI, Paginated):
         self.query_builder = self.query_builder_cls(max_limit=self.MAX_LIMIT)
         self.collection_ids = []
 
-    def _get_path(self):
+    def _get_path(self) -> str:
         if len(self.collection_ids) == 1:
             return os.path.join(self.AUTOCOMPLETE_PATH, self.collection_ids[0])
         return self.AUTOCOMPLETE_PATH
 
-    def select(self, *collection_ids: str):
+    def select(self, *collection_ids: str) -> 'DeletedEntitiesAPI':
         if collection_ids:
-            collection_ids = list({str(id_) for id_ in collection_ids}.union(self.collection_ids))
-            self.collection_ids.extend(collection_ids)
+            collection_ids = {str(id_) for id_ in collection_ids}
+            self.collection_ids = list(collection_ids.union(self.collection_ids))
             self.query_builder.add_fields(collection_ids)
         return self
 
-    def limit(self, value: int):
+    def limit(self, value: int) -> 'DeletedEntitiesAPI':
         self.query_builder.add_limit(value)
         return self
 
-    def order_by_deleted_at(self, sort: str = 'asc'):
+    def order_by_deleted_at(self, sort: str = 'asc') -> 'DeletedEntitiesAPI':
         self.query_builder.add_order('', sort)
         return self
 
@@ -55,9 +55,9 @@ class DeletedEntitiesAPI(CrunchbaseAPI, Paginated):
         self.query_builder.add_next(data_list[-1].uuid)
 
     def set_previous(self, data_list: List[DataDict]):
-        self.query_builder.add_next(data_list[0].uuid)
+        self.query_builder.add_previous(data_list[0].uuid)
 
-    def execute(self) -> list:
+    def execute(self) -> List[DataDict]:
         return [DataDict(data) for data in self.send_request(self._get_path(), params=self.query_builder.build())]
 
 
