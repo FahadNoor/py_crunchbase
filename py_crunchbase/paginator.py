@@ -9,14 +9,20 @@ class Paginator:
 
     def next(self):
         if self.current_list is not None:
-            self.api.set_next(self.current_list)
+            try:
+                self.api.set_next(self.current_list)
+            except IndexError as exc:
+                raise StopIteration from exc
 
         self.current_list = self.api.execute()
         return self.current_list
 
     def previous(self):
         if self.current_list is not None:
-            self.api.set_previous(self.current_list)
+            try:
+                self.api.set_previous(self.current_list)
+            except IndexError as exc:
+                raise StopIteration from exc
 
         self.current_list = self.api.execute()
         return self.current_list

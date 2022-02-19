@@ -1,12 +1,12 @@
-from typing import Union, Type, List
+from typing import Union, Type
 
 from .base import BaseEntitiesAPI
 from ...entities import Entity
-from ...paginator import Paginated, Paginator
+from ...paginator import Paginated, Paginator as BasePaginator
 from ...query_builder import BaseQueryBuilder
 
 
-class CardsAPIPaginator(Paginator):
+class Paginator(BasePaginator):
 
     def __next__(self):
         entity = self.next()
@@ -15,37 +15,29 @@ class CardsAPIPaginator(Paginator):
         return entity
 
 
-class CardsAPIQueryBuilder(BaseQueryBuilder):
-
-    def validate_fields(self, names):
-        pass
+class QueryBuilder(BaseQueryBuilder):
 
     def build(self) -> dict:
-        params = {}
+        params = super().build()
 
+        if self.order:
+            params['order'] = ','.join(self.order[0])
         if self.fields:
             self.fields = list(set(self.fields))
             params['card_field_ids'] = ','.join(self.fields)
-        if self.next_id:
-            params['after_id'] = self.next_id
-        if self.previous_id:
-            params['before_id'] = self.previous_id
-        if self.order:
-            params['order'] = ','.join(self.order[0])
-        if self.limit:
-            params['limit'] = self.limit
 
         return params
 
 
 class CardsAPI(BaseEntitiesAPI, Paginated):
 
-    query_builder_cls = CardsAPIQueryBuilder
-    paginator_cls = CardsAPIPaginator
+    query_builder_cls = QueryBuilder
+    paginator_cls = Paginator
+    MAX_LIMIT = 100
 
     def __init__(self, entity_id: Union[str, Entity], card_id: str, entity_cls: Type[Entity], api_key: str = None):
         super().__init__(entity_cls=entity_cls, api_key=api_key)
-        self.query_builder = self.query_builder_cls()
+        self.query_builder = self.query_builder_cls(max_limit=self.MAX_LIMIT)
         self.entity_id = self._get_entity_id(entity_id)
         self.card_id = card_id
 
@@ -63,20 +55,14 @@ class CardsAPI(BaseEntitiesAPI, Paginated):
         return self
 
     def set_next(self, entity: Entity):
-        if entity.cards:
-            try:
-                card_list = list(entity.cards.values())[0]
-                self.query_builder.add_next(card_list[-1].uuid)
-            except KeyError:
-                pass
+        cards = entity.cards or []
+        card_list = list(cards.values())[0]
+        self.query_builder.add_next(card_list[-1].uuid)
 
     def set_previous(self, entity: Entity):
-        if entity.cards:
-            try:
-                card_list = list(entity.cards.values())[0]
-                self.query_builder.add_previous(card_list[0].uuid)
-            except KeyError:
-                pass
+        cards = entity.cards or []
+        card_list = list(cards.values())[0]
+        self.query_builder.add_previous(card_list[0].uuid)
 
     def execute(self):
         path = self._get_path(self.entity_id, self.card_id)

@@ -9,18 +9,22 @@ from ...paginator import Paginated
 class SearchAPI(CrunchbaseAPI, Paginated):
 
     query_builder_cls = SearchQueryBuilder
+    MAX_LIMIT = 2000
 
     def __init__(self, entity_cls: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)
         self.path = f'searches/{entity_cls.api_path()}'
-        self.query_builder = self.query_builder_cls(entity_cls)
         self.entity_cls = entity_cls
+        self.query_builder = self.get_query_builder()
 
     def reset(self):
         """
         clears the query builder
         """
-        self.query_builder = self.query_builder_cls(self.entity_cls)
+        self.query_builder = self.get_query_builder()
+
+    def get_query_builder(self):
+        return self.query_builder_cls(self.entity_cls, max_limit=self.MAX_LIMIT)
 
     def select(self, *names) -> 'SearchAPI':
         self.query_builder.add_fields(names)
@@ -40,12 +44,10 @@ class SearchAPI(CrunchbaseAPI, Paginated):
         return self
 
     def set_next(self, entities: List[Entity]):
-        if entities:
-            self.query_builder.add_next(entities[-1].uuid)
+        self.query_builder.add_next(entities[-1].uuid)
 
     def set_previous(self, entities: List[Entity]):
-        if entities:
-            self.query_builder.add_previous(entities[0].uuid)
+        self.query_builder.add_previous(entities[0].uuid)
 
     def execute(self) -> list:
         """

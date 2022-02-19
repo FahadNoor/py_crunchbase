@@ -5,16 +5,17 @@ class BaseQueryBuilder:
 
     Exception = CrunchbaseAPIException
 
-    def __init__(self):
+    def __init__(self, min_limit: int = 1, max_limit: int = None):
         self.fields = []
         self.order = []
         self.limit = None
+        self.min_limit = min_limit
+        self.max_limit = max_limit
         self.next_id = None
         self.previous_id = None
 
     def validate_fields(self, names):
-        if len(names) == 0:
-            raise self.Exception('Field names cannot be empty')
+        pass
 
     def add_fields(self, names):
         self.validate_fields(names)
@@ -24,8 +25,9 @@ class BaseQueryBuilder:
         self.order.append((field, sort))
 
     def add_limit(self, value: int):
-        if value < 1:
-            raise self.Exception(f'Invalid limit: {value}')
+        value = max(value, self.min_limit)
+        if self.max_limit:
+            value = min(value, self.max_limit)
         self.limit = value
 
     def add_next(self, uuid: str):
@@ -35,3 +37,15 @@ class BaseQueryBuilder:
     def add_previous(self, uuid: str):
         self.previous_id = self.next_id = None
         self.previous_id = uuid
+
+    def build(self) -> dict:
+        params = {}
+
+        if self.next_id:
+            params['after_id'] = self.next_id
+        if self.previous_id:
+            params['before_id'] = self.previous_id
+        if self.limit:
+            params['limit'] = self.limit
+
+        return params

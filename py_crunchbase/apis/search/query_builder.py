@@ -55,10 +55,10 @@ class SearchQueryBuilder(BaseQueryBuilder):
 
     DEFAULT_FIELDS = '__DEFAULT__'
 
-    def __init__(self, entity_cls: Type[Entity]):
+    def __init__(self, entity_cls: Type[Entity], *args, **kwargs):
         self.entity_cls = entity_cls
         self.queries = []
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
     def add_fields(self, names):
         self.validate_fields(names)
@@ -67,6 +67,10 @@ class SearchQueryBuilder(BaseQueryBuilder):
             self.fields.extend(self.entity_cls.DEFAULT_FIELDS)
         else:
             self.fields.extend(names)
+
+    def validate_fields(self, names):
+        if len(names) == 0:
+            raise self.Exception('Field names cannot be empty')
 
     def add_query(self, field__operator: str, value):
         try:
@@ -85,7 +89,7 @@ class SearchQueryBuilder(BaseQueryBuilder):
         """
         returns dict to be used as query
         """
-        query = {}
+        query = super().build()
 
         if self.fields:
             query['field_ids'] = self.fields
@@ -103,13 +107,5 @@ class SearchQueryBuilder(BaseQueryBuilder):
                 }
                 for field, opr, value in self.queries
             ]
-
-        if self.limit:
-            query['limit'] = self.limit
-
-        if self.next_id:
-            query['after_id'] = self.next_id
-        elif self.previous_id:
-            query['before_id'] = self.previous_id
 
         return query

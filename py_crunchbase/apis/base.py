@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Union
 
 import requests
 
@@ -37,10 +38,12 @@ class CrunchbaseAPI:
                 f'Please provide an API key at initialization or set an env variable at {self.API_KEY_ENV_VAR}'
             )
 
-    def send_request(self, path: str, method_name: str = 'get', payload: dict = None, params: dict = None) -> dict:
+    def send_request(
+            self, path: str, method_name: str = 'get', payload: dict = None, params: dict = None
+    ) -> Union[dict, list]:
         """
         helper method to send an API request
-        :returns response dict or raises an exception
+        :returns response dict/list or raises an exception
         """
         url = os.path.join(self.API_URL, self.API_VERSION, path)
         method = getattr(requests, method_name, requests.get)

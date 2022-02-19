@@ -12,7 +12,7 @@ class AutoCompleteAPI(CrunchbaseAPI):
         self.query = query
         self.collection_ids = [str(id_) for id_ in collection_ids]
 
-    def execute_search(self, limit: int = None):
+    def execute(self, limit: int = None):
         params = {'query': self.query}
 
         if self.collection_ids:
