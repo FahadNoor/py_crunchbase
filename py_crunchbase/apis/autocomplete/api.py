@@ -19,7 +19,7 @@ class AutoCompleteAPI(CrunchbaseAPI):
         self.query = query
         return self
 
-    def select(self, *collection_ids: str) -> 'AutoCompleteAPI':
+    def select_collections(self, *collection_ids: str) -> 'AutoCompleteAPI':
         if collection_ids:
             self.collection_ids = list({str(id_) for id_ in collection_ids}.union(self.collection_ids))
         return self

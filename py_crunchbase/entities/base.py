@@ -1,7 +1,6 @@
 import copy
 import os.path
 from abc import ABCMeta
-from typing import Type
 
 from ..constants import CB_WEBSITE_URL
 from ..utils import DataDict
@@ -35,7 +34,7 @@ class Collection(metaclass=CollectionMeta):
 
 
 # Card #
-class CardsMeta(ABCMeta):
+class CardTypeMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_):
         dict_.pop('all', None)
@@ -44,7 +43,7 @@ class CardsMeta(ABCMeta):
         return super().__new__(mcs, cls_name, bases, dict_)
 
 
-class Cards(metaclass=CardsMeta):
+class CardType(metaclass=CardTypeMeta):
 
     fields = 'fields'
 
@@ -62,7 +61,7 @@ class Entity(DataDict):
 
     ENTITY_DEF_ID = ''
     Collection = None
-    Cards = None
+    CardType = None
 
     # same fields are being used/fetched in multiple use cases, they can be defined here in order to reuse them
     # in the APIs
@@ -92,12 +91,3 @@ class Entity(DataDict):
     @classmethod
     def api_path(cls) -> str:
         return str(cls.Collection)
-
-
-class EntityProxy:
-
-    def __init__(self, entity_cls: Type[Entity]):
-        self.entity_cls = entity_cls
-
-    def __get__(self, instance, owner) -> Type[Entity]:
-        return self.entity_cls

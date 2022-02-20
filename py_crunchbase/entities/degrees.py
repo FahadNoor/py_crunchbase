@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Degrees(Collection):
@@ -7,7 +7,7 @@ class Degrees(Collection):
     _facet_name = 'degree'
 
 
-class DegreeCards(Cards):
+class DegreeCardType(CardType):
     
     organization = 'organization'
     person = 'person'
@@ -17,4 +17,4 @@ class Degree(Entity):
 
     ENTITY_DEF_ID = 'degree'
     Collection = Degrees
-    Cards = DegreeCards
+    CardType = DegreeCardType

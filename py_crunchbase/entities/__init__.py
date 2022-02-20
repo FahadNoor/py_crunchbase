@@ -1,10 +1,19 @@
 from abc import ABC
 from typing import Tuple, Type
 
-from .base import Entity, EntityProxy, Cards
+from .base import Entity, CardType, Collection
 
 
-class ER(ABC):
+class EntityProxy:
+
+    def __init__(self, entity_cls: Type[Entity]):
+        self.entity_cls = entity_cls
+
+    def __get__(self, instance, owner) -> Type[Entity]:
+        return self.entity_cls
+
+
+class Entities(ABC):
     """
     This class should be used to access any or all Entity classes
 
@@ -64,3 +73,51 @@ class ER(ABC):
                 return entity_cls
 
         raise ValueError(f'No entity class found against {entity_def_id}')
+
+
+class Cards(ABC):
+
+    Acquisition = Entities.Acquisition.CardType
+    Address = Entities.Address.CardType
+    Category = Entities.Category.CardType
+    CategoryGroup = Entities.CategoryGroup.CardType
+    Degree = Entities.Degree.CardType
+    EventAppearance = Entities.EventAppearance.CardType
+    Event = Entities.Event.CardType
+    FundingRound = Entities.FundingRound.CardType
+    Fund = Entities.Fund.CardType
+    Investment = Entities.Investment.CardType
+    Ipo = Entities.Ipo.CardType
+    Job = Entities.Job.CardType
+    KeyEmployeeChange = Entities.KeyEmployeeChange.CardType
+    Layoff = Entities.Layoff.CardType
+    Location = Entities.Location.CardType
+    Organization = Entities.Organization.CardType
+    Ownership = Entities.Ownership.CardType
+    Person = Entities.Person.CardType
+    PressReference = Entities.PressReference.CardType
+    Principal = Entities.Principal.CardType
+
+
+class Collections(ABC):
+
+    Acquisition = Entities.Acquisition.Collection
+    Address = Entities.Address.Collection
+    Category = Entities.Category.Collection
+    CategoryGroup = Entities.CategoryGroup.Collection
+    Degree = Entities.Degree.Collection
+    EventAppearance = Entities.EventAppearance.Collection
+    Event = Entities.Event.Collection
+    FundingRound = Entities.FundingRound.Collection
+    Fund = Entities.Fund.Collection
+    Investment = Entities.Investment.Collection
+    Ipo = Entities.Ipo.Collection
+    Job = Entities.Job.Collection
+    KeyEmployeeChange = Entities.KeyEmployeeChange.Collection
+    Layoff = Entities.Layoff.Collection
+    Location = Entities.Location.Collection
+    Organization = Entities.Organization.Collection
+    Ownership = Entities.Ownership.Collection
+    Person = Entities.Person.Collection
+    PressReference = Entities.PressReference.Collection
+    Principal = Entities.Principal.Collection

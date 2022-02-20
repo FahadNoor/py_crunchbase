@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Acquisitions(Collection):
@@ -7,7 +7,7 @@ class Acquisitions(Collection):
     _facet_name = 'acquisition'
 
 
-class AcquisitionCards(Cards):
+class AcquisitionCardType(CardType):
 
     acquiree_organization = 'acquiree_organization'
     acquirer_organization = 'acquirer_organization'
@@ -18,4 +18,4 @@ class Acquisition(Entity):
 
     ENTITY_DEF_ID = 'acquisition'
     Collection = Acquisitions
-    Cards = AcquisitionCards
+    CardType = AcquisitionCardType

@@ -21,7 +21,7 @@ pip install py_crunchbase
 ## Usage
 
 ```python
-from py_crunchbase import PyCrunchbase, ER
+from py_crunchbase import PyCrunchbase, Collections
 
 # API key can be set as the env variable PY_CRUNCHBASE_API_KEY or passed as an argument. 
 pycb = PyCrunchbase()  # or pycb = PyCrunchbase('api_key')
@@ -35,8 +35,8 @@ except api.Exception as exc:
 
 # To provide collection ids or limit
 try:
-    data_list = api.search('crunchbase').select(
-        ER.Organization.Collection, ER.Acquisition.Collection
+    data_list = api.search('crunchbase').select_collections(
+        Collections.Organization, Collections.Person
     ).limit(5).execute()
     for data in data_list:
         print(data.uuid)

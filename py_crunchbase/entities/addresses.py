@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Addresses(Collection):
@@ -7,7 +7,7 @@ class Addresses(Collection):
     _facet_name = 'address'
 
 
-class AddressCards(Cards):
+class AddressCardType(CardType):
 
     event = 'event'
     organization = 'organization'
@@ -17,4 +17,4 @@ class Address(Entity):
 
     ENTITY_DEF_ID = 'address'
     Collection = Addresses
-    Cards = AddressCards
+    CardType = AddressCardType

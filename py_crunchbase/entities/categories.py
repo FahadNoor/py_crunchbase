@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Categories(Collection):
@@ -7,7 +7,7 @@ class Categories(Collection):
     _name = 'categories'
 
 
-class CategoryCards(Cards):
+class CategoryCardType(CardType):
     pass
 
 
@@ -15,4 +15,4 @@ class Category(Entity):
 
     ENTITY_DEF_ID = 'category'
     Collection = Categories
-    Cards = CategoryCards
+    CardType = CategoryCardType

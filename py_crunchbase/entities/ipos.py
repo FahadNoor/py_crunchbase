@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Ipos(Collection):
@@ -7,7 +7,7 @@ class Ipos(Collection):
     _facet_name = 'ipo'
 
 
-class IpoCards(Cards):
+class IpoCardType(CardType):
     
     organization = 'organization'
     press_references = 'press_references'
@@ -17,4 +17,4 @@ class Ipo(Entity):
 
     ENTITY_DEF_ID = 'ipo'
     Collection = Ipos
-    Cards = IpoCards
+    CardType = IpoCardType

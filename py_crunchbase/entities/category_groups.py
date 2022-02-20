@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class CategoryGroups(Collection):
@@ -12,7 +12,7 @@ class CategoryGroups(Collection):
     groups = 'groups'
 
 
-class CategoryGroupCards(Cards):
+class CategoryGroupCardType(CardType):
     pass
 
 
@@ -20,4 +20,4 @@ class CategoryGroup(Entity):
 
     ENTITY_DEF_ID = 'category_group'
     Collection = CategoryGroups
-    Cards = CategoryGroupCards
+    CardType = CategoryGroupCardType

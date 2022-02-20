@@ -36,7 +36,7 @@ class DeletedEntitiesAPI(CrunchbaseAPI, Paginated):
             return os.path.join(self.AUTOCOMPLETE_PATH, self.collection_ids[0])
         return self.AUTOCOMPLETE_PATH
 
-    def select(self, *collection_ids: str) -> 'DeletedEntitiesAPI':
+    def select_collections(self, *collection_ids: str) -> 'DeletedEntitiesAPI':
         if collection_ids:
             collection_ids = {str(id_) for id_ in collection_ids}
             self.collection_ids = list(collection_ids.union(self.collection_ids))

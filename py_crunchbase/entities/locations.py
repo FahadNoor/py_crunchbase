@@ -1,4 +1,4 @@
-from .base import Entity, Collection, Cards
+from .base import Entity, Collection, CardType
 
 
 class Locations(Collection):
@@ -13,7 +13,7 @@ class Locations(Collection):
     region = 'region'
 
 
-class LocationCards(Cards):
+class LocationCardType(CardType):
     pass
 
 
@@ -21,4 +21,4 @@ class Location(Entity):
 
     ENTITY_DEF_ID = 'location'
     Collection = Locations
-    Cards = LocationCards
+    CardType = LocationCardType

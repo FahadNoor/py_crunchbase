@@ -3,7 +3,7 @@ from collections import defaultdict
 from typing import Type
 
 from ..base import CrunchbaseAPI
-from ...entities import Entity, ER, Cards
+from ...entities import Entity, Entities, CardType
 from ...utils import DataDict
 
 
@@ -13,7 +13,7 @@ def parse_cards(cards: dict) -> DataDict:
         for data in data_list:
             entity_def_id = data.get('identifier', {}).get('entity_def_id')
             try:
-                entity_cls = ER.entity_cls_by_id(entity_def_id)
+                entity_cls = Entities.entity_cls_by_id(entity_def_id)
             except ValueError:
                 entity_cls = DataDict
             converted[name].append(entity_cls(data))
@@ -43,6 +43,6 @@ class BaseEntitiesAPI(CrunchbaseAPI):
         return path
 
     def _parse_response_data(self, data: dict) -> Entity:
-        entity = self.entity_cls(data.get('cards', {}).pop(Cards.fields, None) or data.get('properties', {}))
+        entity = self.entity_cls(data.get('cards', {}).pop(CardType.fields, None) or data.get('properties', {}))
         entity.cards = parse_cards(data.get('cards', {}))
         return entity
