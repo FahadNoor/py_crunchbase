@@ -1,7 +1,8 @@
 from typing import List
 
 from ..base import CrunchbaseAPI
-from ...utils import DataDict
+from ... import Entities
+from ...entities import Entity
 
 
 class AutoCompleteAPI(CrunchbaseAPI):
@@ -28,7 +29,7 @@ class AutoCompleteAPI(CrunchbaseAPI):
         self.limit_value = value
         return self
 
-    def execute(self) -> List[DataDict]:
+    def execute(self) -> List[Entity]:
         if not self.query:
             raise ValueError(f'{self.query} is not a valid query')
 
@@ -40,8 +41,8 @@ class AutoCompleteAPI(CrunchbaseAPI):
         if self.limit_value:
             params['limit'] = min(self.limit_value, self.MAX_LIMIT)
 
-        data = self.send_request(self.AUTOCOMPLETE_PATH, params=params)
-        return [DataDict(entity) for entity in data['entities']]
+        result = self.send_request(self.AUTOCOMPLETE_PATH, params=params)
+        return [Entities.dict_to_entity(data) for data in result['entities']]
 
 
 __all__ = ['AutoCompleteAPI']

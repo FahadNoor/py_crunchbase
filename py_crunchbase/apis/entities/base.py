@@ -1,5 +1,4 @@
 import os.path
-from collections import defaultdict
 from typing import Type
 
 from ..base import CrunchbaseAPI
@@ -8,15 +7,10 @@ from ...utils import DataDict
 
 
 def parse_cards(cards: dict) -> DataDict:
-    converted = defaultdict(list)
-    for name, data_list in cards.items():
-        for data in data_list:
-            entity_def_id = data.get('identifier', {}).get('entity_def_id')
-            try:
-                entity_cls = Entities.entity_cls_by_id(entity_def_id)
-            except ValueError:
-                entity_cls = DataDict
-            converted[name].append(entity_cls(data))
+    converted = {
+        name: [Entities.dict_to_entity(data) for data in data_list]
+        for name, data_list in cards.items()
+    }
     return DataDict(converted)
 
 

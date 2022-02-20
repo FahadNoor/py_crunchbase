@@ -1,7 +1,8 @@
 from abc import ABC
-from typing import Tuple, Type
+from typing import Tuple, Type, Union
 
 from .base import Entity, CardType, Collection
+from ..utils import DataDict
 
 
 class EntityProxy:
@@ -39,6 +40,8 @@ class Entities(ABC):
     from .people import Person
     from .press_references import PressReference
     from .principals import Principal
+    
+    ENTITY_ID_CLASS_MAP = None
 
     Acquisition = EntityProxy(Acquisition)
     Address = EntityProxy(Address)
@@ -68,11 +71,24 @@ class Entities(ABC):
 
     @classmethod
     def entity_cls_by_id(cls, entity_def_id: str) -> Type[Entity]:
-        for entity_cls in cls.all():
-            if entity_cls.ENTITY_DEF_ID == entity_def_id:
-                return entity_cls
+        if cls.ENTITY_ID_CLASS_MAP is None:
+            cls.ENTITY_ID_CLASS_MAP = {
+                entity_cls.ENTITY_DEF_ID: entity_cls
+                for entity_cls in cls.all()
+            }
+        
+        entity_cls = cls.ENTITY_ID_CLASS_MAP.get(entity_def_id)
+        if entity_cls is None:
+            raise ValueError(f'No entity class found against {entity_def_id}')
+        return entity_cls
 
-        raise ValueError(f'No entity class found against {entity_def_id}')
+    @classmethod
+    def dict_to_entity(cls, data: dict) -> Union[Entity, DataDict]:
+        entity_def_id = data.get('identifier', {}).get('entity_def_id')
+        try:
+            return cls.entity_cls_by_id(entity_def_id)(data)
+        except ValueError:
+            return DataDict(data)
 
 
 class Cards(ABC):
@@ -101,23 +117,23 @@ class Cards(ABC):
 
 class Collections(ABC):
 
-    Acquisition = Entities.Acquisition.Collection
-    Address = Entities.Address.Collection
-    Category = Entities.Category.Collection
-    CategoryGroup = Entities.CategoryGroup.Collection
-    Degree = Entities.Degree.Collection
-    EventAppearance = Entities.EventAppearance.Collection
-    Event = Entities.Event.Collection
-    FundingRound = Entities.FundingRound.Collection
-    Fund = Entities.Fund.Collection
-    Investment = Entities.Investment.Collection
-    Ipo = Entities.Ipo.Collection
-    Job = Entities.Job.Collection
-    KeyEmployeeChange = Entities.KeyEmployeeChange.Collection
-    Layoff = Entities.Layoff.Collection
-    Location = Entities.Location.Collection
-    Organization = Entities.Organization.Collection
-    Ownership = Entities.Ownership.Collection
-    Person = Entities.Person.Collection
-    PressReference = Entities.PressReference.Collection
-    Principal = Entities.Principal.Collection
+    Acquisitions = Entities.Acquisition.Collection
+    Addresses = Entities.Address.Collection
+    Categories = Entities.Category.Collection
+    CategoryGroups = Entities.CategoryGroup.Collection
+    Degrees = Entities.Degree.Collection
+    EventAppearances = Entities.EventAppearance.Collection
+    Events = Entities.Event.Collection
+    FundingRounds = Entities.FundingRound.Collection
+    Funds = Entities.Fund.Collection
+    Investments = Entities.Investment.Collection
+    Ipos = Entities.Ipo.Collection
+    Jobs = Entities.Job.Collection
+    KeyEmployeeChanges = Entities.KeyEmployeeChange.Collection
+    Layoffs = Entities.Layoff.Collection
+    Locations = Entities.Location.Collection
+    Organizations = Entities.Organization.Collection
+    Ownerships = Entities.Ownership.Collection
+    People = Entities.Person.Collection
+    PressReferences = Entities.PressReference.Collection
+    Principals = Entities.Principal.Collection
