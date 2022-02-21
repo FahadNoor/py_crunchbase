@@ -54,16 +54,15 @@ class CardsAPI(BaseEntitiesAPI, Paginated):
         return self
 
     def set_next(self, entity: Entity):
-        cards = entity.cards or []
+        cards = entity.cards or {}
         card_list = list(cards.values())[0]
         self.query_builder.add_next(card_list[-1].uuid)
 
     def set_previous(self, entity: Entity):
-        cards = entity.cards or []
+        cards = entity.cards or {}
         card_list = list(cards.values())[0]
         self.query_builder.add_previous(card_list[0].uuid)
 
     def execute(self) -> Entity:
         path = self._get_path(self.entity_id, self.card_id)
         return self._parse_response_data(self.send_request(path, params=self.query_builder.build()))
-

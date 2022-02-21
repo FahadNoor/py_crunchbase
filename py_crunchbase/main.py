@@ -21,7 +21,7 @@ class PyCrunchbase:
         return DeletedEntitiesAPI(api_key=self.api_key)
 
     # Entities APIs
-    def _entities_api(self, entity_cls: Type[Entity]):
+    def _entities_api(self, entity_cls: Type[Entity]) -> EntitiesAPI:
         return EntitiesAPI(entity_cls, api_key=self.api_key)
 
     def acquisitions_api(self): return self._entities_api(Entities.Acquisition)

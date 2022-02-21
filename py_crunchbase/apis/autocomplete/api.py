@@ -16,7 +16,7 @@ class AutoCompleteAPI(CrunchbaseAPI):
         self.collection_ids = []
         self.limit_value = None
 
-    def search(self, query: str) -> 'AutoCompleteAPI':
+    def autocomplete(self, query: str) -> 'AutoCompleteAPI':
         self.query = query
         return self
 
