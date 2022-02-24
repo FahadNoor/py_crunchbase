@@ -1,54 +1,23 @@
 from typing import Type
 
+from .predicates import QueryListValue, QueryValue, OPERATORS
 from ...entities import Entity
 from ...query_builder import BaseQueryBuilder
 from ...utils import is_iterable
 
-OPERATORS = {
-    'eq', 'contains', 'not_includes', 'lte', 'starts', 'domain_eq', 'gt', 'not_contains', 'not_eq', 'between',
-    'gte', 'not_includes_all', 'includes', 'includes_all', 'blank', 'lt'
-}
 
-
-def convert_value(obj) -> 'QueryListValue':
+def convert_value(obj) -> QueryListValue:
     """
-    given any value (str, list[str], QueryValue, list[QueryValue],
+    given any value (str, list[str], QueryValue, list[QueryValue], entity, list[entity]),
     returns a QueryListValue
     """
     obj_list = obj if is_iterable(obj) else [obj]
     return QueryListValue([
-        obj_ if isinstance(obj_, QueryValue) else QueryValue(obj_)
+        obj_ if isinstance(obj_, QueryValue) else
+        QueryValue(obj_.uuid) if isinstance(obj_, Entity) else
+        QueryValue(obj_)
         for obj_ in obj_list
     ])
-
-
-class QueryValue:
-    """
-    A helper class to pass simple query value
-    """
-    def __init__(self, value):
-        self.value = value
-
-    def evaluate(self):
-        return self.value
-
-
-class CurrencyValue(QueryValue):
-
-    def __init__(self, value: int, currency: str = 'USD'):
-        super().__init__(value)
-        self.currency = currency
-
-    def evaluate(self) -> dict:
-        return {'value': self.value, 'currency': self.currency}
-
-
-class QueryListValue(QueryValue):
-    """
-    A helper class to pass list of values
-    """
-    def evaluate(self) -> list:
-        return [value.evaluate() for value in self.value]
 
 
 class SearchQueryBuilder(BaseQueryBuilder):

@@ -3,10 +3,10 @@
 PyCrunchbase is a python client for Crunchbase's [REST API](https://app.swaggerhub.com/apis-docs/Crunchbase/crunchbase-enterprise_api/1.0.3#/) (v4).
 Crunchbase provides 4 types of APIs:-
 
-1. Autocomplete API
-2. Deleted Entities API
-3. Entities API
-4. Search API
+1. Search API
+2. Autocomplete API
+3. Deleted Entities API
+4. Entities API
 
 PyCrunchbase supports all 4 APIs through a very simple interface.
 
@@ -30,6 +30,56 @@ pycb = PyCrunchbase()
 pycb = PyCrunchbase('api_key')
 
 # If both are provided, the latter will take preference
+```
+
+### Search API
+
+#### Companies in Europe with funding total between 25m and 100m USD
+```python
+from py_crunchbase import PyCrunchbase, Collections
+from py_crunchbase.apis.search.predicates import Currency
+
+pycb = PyCrunchbase()
+
+api = pycb.search_organizations_api()
+
+api.select(
+    'identifier', 'categories', 'location_identifiers', 'short_description', 'rank_org'
+).where(
+    funding_total__between=[Currency(25000000), Currency(100000000)],
+    location_identifiers__includes=['6106f5dc-823e-5da8-40d7-51612c0b2c4e'],
+    facet_ids__includes=[Collections.Organizations.companies]
+).order_by(
+    'rank_org'
+).limit(50)
+
+# iterate through companies
+for page in api.iterate():
+    for company in page:
+        print(company.permalink)
+```
+
+#### Biotech companies with number of employees between 101 and 250
+```python
+from py_crunchbase import PyCrunchbase
+
+pycb = PyCrunchbase()
+
+api = pycb.search_organizations_api()
+
+api.select(
+    'identifier', 'categories', 'location_identifiers', 'short_description', 'rank_org'
+).where(
+    num_employees_enum__includes=['c_00101_00250'],
+    categories__includes=['58842728-7ab9-5bd1-bb67-e8e55f6520a0']
+).order_by(
+    'rank_org'
+).limit(50)
+
+# iterate through companies
+for page in api.iterate():
+    for company in page:
+        print(company.permalink)
 ```
 
 ### Autocomplete API
@@ -98,32 +148,6 @@ for entity in cards_api.iterate():
     for card_name, values in entity.cards.items():
         for card in values:
             print(card.uuid, card.entity_def_id)
-```
-
-### Search API
-Search API also has a method per entity type. For example:
-- search_org_api = pycb.search_organizations_api()
-- search_people_api = pycb.search_people_api()
-
-You can check complete list in PyCrunchbase class.
-Below is an exaple of Search API for Organizations
-```python
-from py_crunchbase import PyCrunchbase
-
-pycb = PyCrunchbase()
-
-api = pycb.search_organizations_api()
-
-# get contact email of organizations whose founder's permalink is michael-arrington
-# order results by founded on date, limit results to 5
-api.select('contact_email').where(
-    founder_identifiers__includes=['michael-arrington']
-).order_by('founded_on', 'desc').limit(5)
-
-# iterate through entities
-for page in api.iterate():
-    for entity in page:
-        print(entity.uuid, entity.permalink)
 ```
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
