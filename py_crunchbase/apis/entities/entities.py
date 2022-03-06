@@ -1,7 +1,7 @@
 from typing import Union, Type
 
 from .base import BaseEntitiesAPI
-from ...entities import Entity, CardType
+from ...entities import Entity, BaseCards
 from ...utils import is_iterable
 
 
@@ -18,8 +18,8 @@ class EntitiesAPI(BaseEntitiesAPI):
     def select(self, *field_ids: str) -> 'EntitiesAPI':
         if field_ids:
             if field_ids[0] == self.ALL_FIELDS:
-                if CardType.fields not in self.card_ids:
-                    self.card_ids.append(CardType.fields)
+                if BaseCards.fields not in self.card_ids:
+                    self.card_ids.append(BaseCards.fields)
             else:
                 self.field_ids = list(set(field_ids).union(self.field_ids))
         return self

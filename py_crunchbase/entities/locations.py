@@ -1,10 +1,23 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Locations(Collection):
 
     _name = 'locations'
     _facet_name = 'location'
+
+    cities = 'cities'
+    continents = 'continents'
+    countries = 'countries'
+    groups = 'groups'
+    regions = 'regions'
+
+
+class LocationCards(BaseCards):
+    pass
+
+
+class LocationFacets:
 
     city = 'city'
     continent = 'continent'
@@ -13,12 +26,9 @@ class Locations(Collection):
     region = 'region'
 
 
-class LocationCardType(CardType):
-    pass
-
-
 class Location(Entity):
 
     ENTITY_DEF_ID = 'location'
     Collection = Locations
-    CardType = LocationCardType
+    Cards = LocationCards
+    Facets = LocationFacets

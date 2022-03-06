@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class PressReferences(Collection):
 
     _name = 'press_references'
-    _facet_name = 'press_reference'
 
 
-class PressReferenceCardType(CardType):
+class PressReferenceCards(BaseCards):
     pass
 
 
@@ -15,4 +14,4 @@ class PressReference(Entity):
 
     ENTITY_DEF_ID = 'press_reference'
     Collection = PressReferences
-    CardType = PressReferenceCardType
+    Cards = PressReferenceCards

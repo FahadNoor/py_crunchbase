@@ -1,4 +1,4 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class People(Collection):
@@ -9,7 +9,7 @@ class People(Collection):
     investors = 'investors'
 
 
-class PersonCardType(CardType):
+class PersonCards(BaseCards):
 
     degrees = 'degrees'
     event_appearances = 'event_appearances'
@@ -25,8 +25,14 @@ class PersonCardType(CardType):
     primary_organization = 'primary_organization'
 
 
+class PersonFacets:
+
+    investor = 'investor'
+
+
 class Person(Entity):
 
     ENTITY_DEF_ID = 'person'
     Collection = People
-    CardType = PersonCardType
+    Cards = PersonCards
+    Facets = PersonFacets

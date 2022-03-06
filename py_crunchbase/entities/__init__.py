@@ -1,7 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from typing import Tuple, Type, Union
 
-from .base import Entity, CardType, Collection
+from .base import Entity, BaseCards, Collection
 from ..utils import DataDict
 
 
@@ -40,6 +40,10 @@ class Entities(ABC):
     from .people import Person
     from .press_references import PressReference
     from .principals import Principal
+
+    @abstractmethod
+    def __init__(self):
+        pass
     
     ENTITY_ID_CLASS_MAP = None
 
@@ -93,26 +97,26 @@ class Entities(ABC):
 
 class Cards(ABC):
 
-    Acquisition = Entities.Acquisition.CardType
-    Address = Entities.Address.CardType
-    Category = Entities.Category.CardType
-    CategoryGroup = Entities.CategoryGroup.CardType
-    Degree = Entities.Degree.CardType
-    EventAppearance = Entities.EventAppearance.CardType
-    Event = Entities.Event.CardType
-    FundingRound = Entities.FundingRound.CardType
-    Fund = Entities.Fund.CardType
-    Investment = Entities.Investment.CardType
-    Ipo = Entities.Ipo.CardType
-    Job = Entities.Job.CardType
-    KeyEmployeeChange = Entities.KeyEmployeeChange.CardType
-    Layoff = Entities.Layoff.CardType
-    Location = Entities.Location.CardType
-    Organization = Entities.Organization.CardType
-    Ownership = Entities.Ownership.CardType
-    Person = Entities.Person.CardType
-    PressReference = Entities.PressReference.CardType
-    Principal = Entities.Principal.CardType
+    Acquisition = Entities.Acquisition.Cards
+    Address = Entities.Address.Cards
+    Category = Entities.Category.Cards
+    CategoryGroup = Entities.CategoryGroup.Cards
+    Degree = Entities.Degree.Cards
+    EventAppearance = Entities.EventAppearance.Cards
+    Event = Entities.Event.Cards
+    FundingRound = Entities.FundingRound.Cards
+    Fund = Entities.Fund.Cards
+    Investment = Entities.Investment.Cards
+    Ipo = Entities.Ipo.Cards
+    Job = Entities.Job.Cards
+    KeyEmployeeChange = Entities.KeyEmployeeChange.Cards
+    Layoff = Entities.Layoff.Cards
+    Location = Entities.Location.Cards
+    Organization = Entities.Organization.Cards
+    Ownership = Entities.Ownership.Cards
+    Person = Entities.Person.Cards
+    PressReference = Entities.PressReference.Cards
+    Principal = Entities.Principal.Cards
 
 
 class Collections(ABC):

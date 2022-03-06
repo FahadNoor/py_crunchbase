@@ -1,6 +1,6 @@
 import copy
 import os.path
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 from ..constants import CB_WEBSITE_URL
 from ..utils import DataDict
@@ -32,9 +32,13 @@ class Collection(metaclass=CollectionMeta):
     _name = ''
     _facet_name = ''
 
+    @abstractmethod
+    def __init__(self):
+        pass
+
 
 # Card #
-class CardTypeMeta(ABCMeta):
+class BaseCardsMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_):
         dict_.pop('all', None)
@@ -43,9 +47,13 @@ class CardTypeMeta(ABCMeta):
         return super().__new__(mcs, cls_name, bases, dict_)
 
 
-class CardType(metaclass=CardTypeMeta):
+class BaseCards(metaclass=BaseCardsMeta):
 
     fields = 'fields'
+
+    @abstractmethod
+    def __init__(self):
+        pass
 
     @classmethod
     def all(cls):
@@ -61,7 +69,8 @@ class Entity(DataDict):
 
     ENTITY_DEF_ID = ''
     Collection = None
-    CardType = None
+    Cards = None
+    Facets = None
 
     # same fields are being used/fetched in multiple use cases, they can be defined here in order to reuse them
     # in the APIs

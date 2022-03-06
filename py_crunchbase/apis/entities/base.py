@@ -2,7 +2,7 @@ import os.path
 from typing import Type
 
 from ..base import CrunchbaseAPI
-from ...entities import Entity, Entities, CardType
+from ...entities import Entity, Entities, BaseCards
 from ...utils import DataDict
 
 
@@ -37,6 +37,6 @@ class BaseEntitiesAPI(CrunchbaseAPI):
         return path
 
     def _parse_response_data(self, data: dict) -> Entity:
-        entity = self.entity_cls(data.get('cards', {}).pop(CardType.fields, None) or data.get('properties', {}))
+        entity = self.entity_cls(data.get('cards', {}).pop(BaseCards.fields, None) or data.get('properties', {}))
         entity.cards = parse_cards(data.get('cards', {}))
         return entity

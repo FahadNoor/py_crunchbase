@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Ownerships(Collection):
 
     _name = 'ownerships'
-    _facet_name = 'ownership'
 
 
-class OwnershipCardType(CardType):
+class OwnershipCards(BaseCards):
 
     child_organization = 'child_organization'
     parent_organization = 'parent_organization'
@@ -18,4 +17,4 @@ class Ownership(Entity):
 
     ENTITY_DEF_ID = 'ownership'
     Collection = Ownerships
-    CardType = OwnershipCardType
+    Cards = OwnershipCards

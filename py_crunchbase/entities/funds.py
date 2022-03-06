@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Funds(Collection):
 
     _name = 'funds'
-    _facet_name = 'fund'
 
 
-class FundCardType(CardType):
+class FundCards(BaseCards):
     
     investors = 'investors'
     owner = 'owner'
@@ -18,4 +17,4 @@ class Fund(Entity):
 
     ENTITY_DEF_ID = 'fund'
     Collection = Funds
-    CardType = FundCardType
+    Cards = FundCards

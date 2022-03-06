@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Events(Collection):
 
     _name = 'events'
-    _facet_name = 'event'
 
 
-class EventCardType(CardType):
+class EventCards(BaseCards):
 
     address = 'address'
     appearances = 'appearances'
@@ -23,4 +22,4 @@ class Event(Entity):
 
     ENTITY_DEF_ID = 'event'
     Collection = Events
-    CardType = EventCardType
+    Cards = EventCards

@@ -1,4 +1,4 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Organizations(Collection):
@@ -11,7 +11,7 @@ class Organizations(Collection):
     schools = 'schools'
 
 
-class OrganizationCardType(CardType):
+class OrganizationCards(BaseCards):
 
     acquiree_acquisitions = 'acquiree_acquisitions'
     acquirer_acquisitions = 'acquirer_acquisitions'
@@ -36,8 +36,16 @@ class OrganizationCardType(CardType):
     raised_investments = 'raised_investments'
 
 
+class OrganizationFacets:
+
+    company = 'company'
+    investor = 'investor'
+    school = 'school'
+
+
 class Organization(Entity):
 
     ENTITY_DEF_ID = 'organization'
     Collection = Organizations
-    CardType = OrganizationCardType
+    Cards = OrganizationCards
+    Facets = OrganizationFacets

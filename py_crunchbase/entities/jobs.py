@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Jobs(Collection):
 
     _name = 'jobs'
-    _facet_name = 'job'
 
 
-class JobCardType(CardType):
+class JobCards(BaseCards):
 
     organization = 'organization'
     person = 'person'
@@ -17,4 +16,4 @@ class Job(Entity):
 
     ENTITY_DEF_ID = 'job'
     Collection = Jobs
-    CardType = JobCardType
+    Cards = JobCards

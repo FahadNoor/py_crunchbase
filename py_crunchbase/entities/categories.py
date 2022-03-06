@@ -1,13 +1,12 @@
-from .base import Entity, Collection, CardType
+from .base import Entity, Collection, BaseCards
 
 
 class Categories(Collection):
 
-    _facet_name = 'category'
     _name = 'categories'
 
 
-class CategoryCardType(CardType):
+class CategoryCards(BaseCards):
     pass
 
 
@@ -15,4 +14,4 @@ class Category(Entity):
 
     ENTITY_DEF_ID = 'category'
     Collection = Categories
-    CardType = CategoryCardType
+    Cards = CategoryCards

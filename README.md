@@ -131,6 +131,7 @@ entity = entities_api.select_all().execute()
 print(entity.uuid, entity.entity_def_id)
 ```
 #### Entities Card API for Organizations
+
 ```python
 from py_crunchbase import PyCrunchbase, Cards
 
