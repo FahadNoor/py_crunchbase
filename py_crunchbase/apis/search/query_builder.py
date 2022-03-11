@@ -22,8 +22,6 @@ def convert_value(obj) -> QueryListValue:
 
 class SearchQueryBuilder(BaseQueryBuilder):
 
-    DEFAULT_FIELDS = '__DEFAULT__'
-
     def __init__(self, entity_cls: Type[Entity], *args, **kwargs):
         self.entity_cls = entity_cls
         self.queries = []
@@ -31,12 +29,7 @@ class SearchQueryBuilder(BaseQueryBuilder):
 
     def add_fields(self, names):
         self.validate_fields(names)
-
-        if names[0] == self.DEFAULT_FIELDS:
-            self.fields.extend(self.entity_cls.DEFAULT_FIELDS)
-        else:
-            self.fields.extend(names)
-        self.fields = list(set(self.fields))
+        self.fields = list(set(names).union(self.fields))
 
     def validate_fields(self, names):
         if len(names) == 0:

@@ -2,7 +2,6 @@ from typing import Union, Type
 
 from .base import BaseEntitiesAPI
 from ...entities import Entity, BaseCards
-from ...utils import is_iterable
 
 
 class EntitiesAPI(BaseEntitiesAPI):
@@ -28,10 +27,14 @@ class EntitiesAPI(BaseEntitiesAPI):
         self.select(self.ALL_FIELDS)
         return self
 
-    def select_cards(self, card_ids: Union[list, str]) -> 'EntitiesAPI':
+    def select_cards(self, *card_ids: str) -> 'EntitiesAPI':
         if card_ids:
-            card_ids = set(card_ids) if is_iterable(card_ids) else {card_ids}
-            self.card_ids = list(card_ids.union(self.card_ids))
+            self.card_ids = list(set(card_ids).union(self.card_ids))
+        return self
+
+    def select_all_cards(self) -> 'EntitiesAPI':
+        if self.entity_cls.Cards:
+            self.select_cards(*self.entity_cls.Cards.all())
         return self
 
     def execute(self) -> Entity:

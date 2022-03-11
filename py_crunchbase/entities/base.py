@@ -72,10 +72,6 @@ class Entity(DataDict):
     Cards = None
     Facets = None
 
-    # same fields are being used/fetched in multiple use cases, they can be defined here in order to reuse them
-    # in the APIs
-    DEFAULT_FIELDS = tuple()
-
     def __init__(self, data: dict):
         self._original_entity_data = copy.copy(data)
         self.cards = None
