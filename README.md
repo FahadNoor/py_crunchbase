@@ -215,6 +215,49 @@ for card in card_list:
     print(card.uuid)
 
 ```
+## Extras
+
+### Entities
+Each Crunchbase Entity has its own class and can be accessed through `Entities`
+```python
+from py_crunchbase import Entities
+
+Organization = Entities.Organization
+Person = Entities.Person
+```
+Entity classes can be extended through a decorator
+```python
+from py_crunchbase import Entities
+from py_crunchbase.decorators import override_entity
+
+@override_entity(Entities.Organization)
+class CustomOrganization(Entities.Organization):
+    pass
+
+# now Entities.Organization will return CustomOrganization
+```
+### Cards
+Each Entity class defines its own cards (if any) and can be accessed through `Cards`
+```python
+from py_crunchbase import Cards
+
+OrgCards = Cards.Organization
+print(OrgCards.investors)
+print(OrgCards.founders)
+
+# all available Org cards
+print(OrgCards.all())
+```
+### Collections
+Collections are also defined in Entity class and can be accessed through `Collections`
+```python
+from py_crunchbase import Collections
+
+OrgCol = Collections.Organizations
+print(OrgCol.companies)
+print(OrgCol.schools)
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 

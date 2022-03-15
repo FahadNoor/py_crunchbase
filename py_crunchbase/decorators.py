@@ -7,7 +7,7 @@ def override_entity(entity_cls: Type[Entity]):
     """
     This can be used to override any Entity class
 
-    @override_entity(Entities.Organization):
+    @override_entity(Entities.Organization)
     class CustomOrganization(Entities.Organization):
         pass
 
@@ -26,7 +26,7 @@ def override_entity(entity_cls: Type[Entity]):
 
         # update in Cards
         if getattr(Cards, cards_attr_name, None) is not None:
-            setattr(Cards, cards_attr_name, new_entity_cls.CardType)
+            setattr(Cards, cards_attr_name, new_entity_cls.Cards)
 
         # update in Collections
         if getattr(Collections, collections_attr_name, None) is not None:

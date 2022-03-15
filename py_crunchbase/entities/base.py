@@ -16,10 +16,11 @@ class CollectionMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_):
 
-        facet_name = dict_['_facet_name']
-        for attr_name, value in dict_.items():
-            if attr_name[0] != '_':
-                dict_[attr_name] = f'{facet_name}.{value}'
+        facet_name = dict_.get('_facet_name')
+        if facet_name:
+            for attr_name, value in dict_.items():
+                if attr_name[0] != '_':
+                    dict_[attr_name] = f'{facet_name}.{value}'
 
         return super().__new__(mcs, cls_name, bases, dict_)
 
