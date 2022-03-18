@@ -1,6 +1,6 @@
 from typing import Union, Type
 
-from .base import BaseEntitiesAPI
+from .base_ import BaseEntitiesAPI
 from ...entities import Entity
 from ...paginator import Paginated, Paginator as BasePaginator
 from ...query_builder import BaseQueryBuilder
