@@ -18,7 +18,7 @@ class TestQueryBuilder:
     def test_build(self):
         qb = QueryBuilder()
         params = {'a': 'b'}
-        with patch('py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params) as super_build:
+        with patch('py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params):
             assert qb.build() == {'a': 'b'}
 
             qb.fields = ['c1', 'c2']

@@ -24,8 +24,7 @@ class EntitiesAPI(BaseEntitiesAPI):
         return self
 
     def select_all(self) -> 'EntitiesAPI':
-        self.select(self.ALL_FIELDS)
-        return self
+        return self.select(self.ALL_FIELDS)
 
     def select_cards(self, *card_ids: str) -> 'EntitiesAPI':
         if card_ids:
