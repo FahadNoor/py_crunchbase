@@ -11,11 +11,12 @@ def convert_value(obj) -> QueryListValue:
     given any value (str, list[str], QueryValue, list[QueryValue], entity, list[entity]),
     returns a QueryListValue
     """
+    if isinstance(obj, Entity):
+        return QueryListValue([QueryValue(obj.uuid)])
+
     obj_list = obj if is_iterable(obj) else [obj]
     return QueryListValue([
-        obj_ if isinstance(obj_, QueryValue) else
-        QueryValue(obj_.uuid) if isinstance(obj_, Entity) else
-        QueryValue(obj_)
+        obj_ if isinstance(obj_, QueryValue) else QueryValue(obj_)
         for obj_ in obj_list
     ])
 
