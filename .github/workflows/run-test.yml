@@ -2,17 +2,23 @@ name: Unit Tests
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [main]
 jobs:
   Checkout-And-Run-Tests:
     runs-on: ubuntu-latest
+    env:
+      OS: ubuntu-latest
+      PYTHON: '3.10'
     steps:
       - name: Check Out Repo
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
 
       - name: Install requirements
         run: pip install -r requirements.txt
 
       - name: Run Tests
-        run: pytest
+        run: coverage run -m pytest
+
+      - name: Coverage Report
+        run: coverage report
