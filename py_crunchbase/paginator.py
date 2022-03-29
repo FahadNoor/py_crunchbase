@@ -1,6 +1,3 @@
-from abc import ABC
-
-
 class Paginator:
 
     def __init__(self, api: 'Paginated'):
@@ -37,7 +34,7 @@ class Paginator:
         return data
 
 
-class Paginated(ABC):
+class Paginated:
     """
     This is an interface that should be implemented by the class that needs to provide a paginator.
     """
