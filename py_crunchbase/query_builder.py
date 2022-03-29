@@ -31,11 +31,11 @@ class BaseQueryBuilder:
         self.limit = value
 
     def add_next(self, uuid: str):
-        self.previous_id = self.next_id = None
+        self.previous_id = None
         self.next_id = uuid
 
     def add_previous(self, uuid: str):
-        self.previous_id = self.next_id = None
+        self.next_id = None
         self.previous_id = uuid
 
     def build(self) -> dict:

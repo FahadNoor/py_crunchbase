@@ -1,6 +1,6 @@
 import copy
 import os.path
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, ABC
 
 from ..constants import CB_WEBSITE_URL
 from ..utils import DataDict
@@ -16,10 +16,11 @@ class CollectionMeta(ABCMeta):
 
     def __new__(mcs, cls_name, bases, dict_):
 
-        facet_name = dict_['_facet_name']
-        for attr_name, value in dict_.items():
-            if attr_name[0] != '_':
-                dict_[attr_name] = f'{facet_name}.{value}'
+        facet_name = dict_.get('_facet_name')
+        if facet_name:
+            for attr_name, value in dict_.items():
+                if attr_name[0] != '_':
+                    dict_[attr_name] = f'{facet_name}.{value}'
 
         return super().__new__(mcs, cls_name, bases, dict_)
 
@@ -38,16 +39,7 @@ class Collection(metaclass=CollectionMeta):
 
 
 # Card #
-class BaseCardsMeta(ABCMeta):
-
-    def __new__(mcs, cls_name, bases, dict_):
-        dict_.pop('all', None)
-        all_values = tuple(value for key, value in dict_.items() if not key.startswith('__'))
-        dict_['all'] = classmethod(lambda cls: all_values)
-        return super().__new__(mcs, cls_name, bases, dict_)
-
-
-class BaseCards(metaclass=BaseCardsMeta):
+class BaseCards(ABC):
 
     fields = 'fields'
 
@@ -57,8 +49,9 @@ class BaseCards(metaclass=BaseCardsMeta):
 
     @classmethod
     def all(cls):
-        """returns a tuple of all card values. It will be updated in metaclass"""
-        return tuple()
+        """returns a tuple of all card values."""
+        names = (name for name in dir(cls) if not name.startswith('_') and name != 'all')
+        return tuple(getattr(cls, name) for name in names)
 
 
 # Entity #

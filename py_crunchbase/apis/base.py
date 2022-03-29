@@ -50,7 +50,11 @@ class CrunchbaseAPI:
         url = os.path.join(self.API_URL, self.API_VERSION, path)
         method = getattr(requests, method_name, requests.get)
 
-        response = method(url, params=params, json=payload, headers={'X-cb-user-key': self.api_key})
+        try:
+            response = method(url, params=params, json=payload, headers={'X-cb-user-key': self.api_key})
+        except requests.RequestException as exc:
+            raise self.Exception(str(exc)) from exc
+
         try:
             data = response.json()
         except json.JSONDecodeError as exc:

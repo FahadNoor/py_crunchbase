@@ -2,7 +2,7 @@ from itertools import chain
 from typing import Union, Type, List, Iterable
 
 from .cards import CardsAPI
-from .entities import EntitiesAPI
+from .entities_ import EntitiesAPI
 from ...entities import Entity
 
 
@@ -47,7 +47,7 @@ class EntitiesAPIProxy:
                 api.order_by(order_by)
             else:
                 api.order_by(*order_by)
-        return list(chain.from_iterable(entity.cards.values() for entity in api.iterate()))
+        return list(chain.from_iterable(list(entity.cards.values())[0] for entity in api.iterate()))
 
     def get_entities_api(self, entity_id: Union[str, Entity]) -> EntitiesAPI:
         return EntitiesAPI(entity_id=entity_id, entity_cls=self.entity_cls, api_key=self.api_key)
