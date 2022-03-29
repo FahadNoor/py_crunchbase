@@ -40,7 +40,7 @@ from py_crunchbase import PyCrunchbase
 from py_crunchbase.apis.search.predicates import Currency
 
 pycb = PyCrunchbase()
-api = pycb.search_organizations_api()
+api = pycb.search_funding_rounds_api()
 
 api.select(
     'identifier', 'announced_on', 'funded_organization_identifier', 'money_raised', 'investment_type'
@@ -51,8 +51,8 @@ api.select(
 )
 
 for page in api.iterate():
-    for company in page:
-        print(company.permalink)
+    for funding_round in page:
+        print(funding_round.permalink)
 ```
 
 #### [Find companies in Europe w/ $25M-$100M USD in funding](https://data.crunchbase.com/docs/examples-search-api#example-2-find-companies-in-europe-w-25m-100m-usd-in-funding)
@@ -207,7 +207,7 @@ cards = Cards.Organization
 card_list = org_api.get_cards(
     entity_id='sequoia-capital',
     card_id=cards.participated_investments,
-    card_field_ids=['announced_on', 'funding_round_money_raised', 'organization_identifier', 'partner_identifier'],
+    card_field_ids=['announced_on', 'funding_round_money_raised', 'organization_identifier', 'partner_identifiers'],
     order_by=('funding_round_money_raised', 'desc')
 )
 

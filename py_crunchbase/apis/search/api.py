@@ -9,7 +9,7 @@ from ...paginator import Paginated
 class SearchAPI(CrunchbaseAPI, Paginated):
 
     query_builder_cls = SearchQueryBuilder
-    MAX_LIMIT = 2000
+    MAX_LIMIT = 1000
 
     def __init__(self, entity_cls: Type[Entity], api_key: str = None):
         super().__init__(api_key=api_key)

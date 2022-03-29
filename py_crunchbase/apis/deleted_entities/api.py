@@ -23,7 +23,7 @@ class QueryBuilder(BaseQueryBuilder):
 class DeletedEntitiesAPI(CrunchbaseAPI, Paginated):
 
     AUTOCOMPLETE_PATH = 'deleted_entities'
-    MAX_LIMIT = 2000
+    MAX_LIMIT = 1000
     query_builder_cls = QueryBuilder
 
     def __init__(self, api_key: str = None):

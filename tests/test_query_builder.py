@@ -63,10 +63,10 @@ class TestBaseQueryBuilder:
         assert qb.previous_id == 'c'
 
     def test_build(self, qb):
-        assert qb.build() == {}
+        assert qb.build() == {'limit': 5}
         qb.next_id = 'a'
-        assert qb.build() == {'after_id': 'a'}
+        assert qb.build() == {'after_id': 'a', 'limit': 5}
         qb.previous_id = 'b'
-        assert qb.build() == {'after_id': 'a', 'before_id': 'b'}
-        qb.limit = 5
         assert qb.build() == {'after_id': 'a', 'before_id': 'b', 'limit': 5}
+        qb.limit = 8
+        assert qb.build() == {'after_id': 'a', 'before_id': 'b', 'limit': 8}

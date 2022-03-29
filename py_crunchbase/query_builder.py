@@ -8,7 +8,7 @@ class BaseQueryBuilder:
     def __init__(self, min_limit: int = 1, max_limit: int = None):
         self.fields = []
         self.order = []
-        self.limit = None
+        self.limit = max_limit
         self.min_limit = min_limit
         self.max_limit = max_limit
         self.next_id = None
