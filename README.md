@@ -258,6 +258,27 @@ print(OrgCol.companies)
 print(OrgCol.schools)
 ```
 
+### Exception Handling
+There are two ways to catch exceptions
+```python
+from py_crunchbase import PyCrunchbase, CrunchbaseAPIException
+
+pycb = PyCrunchbase()
+api = pycb.autocomplete_api()
+
+try:
+    entities = api.autocomplete('box').limit(15).execute()
+except api.Exception:
+    pass
+
+# OR through CrunchbaseAPIException
+
+try:
+    entities = api.autocomplete('box').limit(15).execute()
+except CrunchbaseAPIException:
+    pass
+```
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
