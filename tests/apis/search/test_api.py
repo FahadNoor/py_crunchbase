@@ -21,7 +21,7 @@ class TestSearchAPI:
     def test_constants(self):
         assert issubclass(SearchAPI, (CrunchbaseAPI, Paginated))
         assert SearchAPI.query_builder_cls is SearchQueryBuilder
-        assert SearchAPI.MAX_LIMIT == 2000
+        assert SearchAPI.MAX_LIMIT == 1000
 
     def test_init(self):
         qb = MagicMock()

@@ -37,7 +37,7 @@ class TestDeletedEntitiesAPI:
     def test_constants(self):
         assert issubclass(DeletedEntitiesAPI, (CrunchbaseAPI, Paginated))
         assert DeletedEntitiesAPI.AUTOCOMPLETE_PATH == 'deleted_entities'
-        assert DeletedEntitiesAPI.MAX_LIMIT == 2000
+        assert DeletedEntitiesAPI.MAX_LIMIT == 1000
         assert DeletedEntitiesAPI.query_builder_cls is QueryBuilder
 
     def test_init(self):

@@ -19,7 +19,7 @@ class TestAutoCompleteAPI:
         super_init.assert_called_once_with(api_key='key_value')
         assert api.query is None
         assert api.collection_ids == []
-        assert api.limit_value is None
+        assert api.limit_value == api.MAX_LIMIT
 
         with patch('py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
             AutoCompleteAPI()
@@ -55,7 +55,7 @@ class TestAutoCompleteAPI:
             with patch.object(Entities, 'dict_to_entity', side_effect=[ent_a, ent_b]) as dict_to_entity:
                 assert api.execute() == [ent_a, ent_b]
 
-        send_request.assert_called_once_with(api.AUTOCOMPLETE_PATH, params={'query': 'a_query'})
+        send_request.assert_called_once_with(api.AUTOCOMPLETE_PATH, params={'query': 'a_query', 'limit': api.MAX_LIMIT})
         dict_to_entity.assert_has_calls([call('data_a'), call('data_b')])
 
     def test_execute_optionals(self):
@@ -78,7 +78,7 @@ class TestAutoCompleteAPI:
                 # test max limit check
                 send_request.reset_mock()
                 dict_to_entity.side_effect = [ent_a, ent_b]
-                api.limit_value = api.MAX_LIMIT + 1
+                api.limit(api.MAX_LIMIT + 1)
                 api.execute()
                 send_request.assert_called_once_with(
                     api.AUTOCOMPLETE_PATH,
