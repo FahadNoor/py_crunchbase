@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.organizations import Organizations, OrganizationCards, OrganizationFacets, Organization
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.organizations import Organizations, OrganizationCards, OrganizationFacets, Organization
 
 
 def test_organizations():

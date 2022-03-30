@@ -1,6 +1,6 @@
 from typing import Type
 
-from py_crunchbase.entities import Entity, Entities, Cards, Collections
+from src.py_crunchbase.entities import Entity, Entities, Cards, Collections
 
 
 def override_entity(entity_cls: Type[Entity]):

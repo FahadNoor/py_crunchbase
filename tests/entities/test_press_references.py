@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.press_references import PressReferences, PressReferenceCards, PressReference
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.press_references import PressReferences, PressReferenceCards, PressReference
 
 
 def test_press_references():

@@ -3,11 +3,11 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from py_crunchbase.apis import CrunchbaseAPI
-from py_crunchbase.apis.deleted_entities.api import QueryBuilder, DeletedEntitiesAPI
-from py_crunchbase.paginator import Paginated
-from py_crunchbase.query_builder import BaseQueryBuilder
-from py_crunchbase.utils import DataDict
+from src.py_crunchbase.apis import CrunchbaseAPI
+from src.py_crunchbase.apis.deleted_entities.api import QueryBuilder, DeletedEntitiesAPI
+from src.py_crunchbase.paginator import Paginated
+from src.py_crunchbase.query_builder import BaseQueryBuilder
+from src.py_crunchbase.utils import DataDict
 
 
 class TestQueryBuilder:
@@ -18,7 +18,7 @@ class TestQueryBuilder:
     def test_build(self):
         qb = QueryBuilder()
         params = {'a': 'b'}
-        with patch('py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params):
+        with patch('src.py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params):
             assert qb.build() == {'a': 'b'}
 
             qb.fields = ['c1', 'c2']
@@ -42,7 +42,7 @@ class TestDeletedEntitiesAPI:
 
     def test_init(self):
         qb = MagicMock()
-        with patch('py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
             with patch.object(DeletedEntitiesAPI, 'query_builder_cls', return_value=qb) as qb_cls:
                 api = DeletedEntitiesAPI(api_key='de_api_key')
                 super_init.assert_called_once_with(api_key='de_api_key')

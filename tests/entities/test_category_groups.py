@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.category_groups import CategoryGroups, CategoryGroupCards, CategoryGroup
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.category_groups import CategoryGroups, CategoryGroupCards, CategoryGroup
 
 
 def test_category_groups():

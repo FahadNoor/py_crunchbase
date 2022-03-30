@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, Entity
-from py_crunchbase.entities.layoffs import Layoffs, Layoff
+from src.py_crunchbase.entities import Collection, Entity
+from src.py_crunchbase.entities.layoffs import Layoffs, Layoff
 
 
 def test_layoffs():

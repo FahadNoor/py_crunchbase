@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, Entity
-from py_crunchbase.entities.principals import Principals, PrincipalFacets, Principal
+from src.py_crunchbase.entities import Collection, Entity
+from src.py_crunchbase.entities.principals import Principals, PrincipalFacets, Principal
 
 
 def test_principals():

@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 import pytest
 
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.utils import DataDict
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.utils import DataDict
 
 
 class DogCollection(Collection):
@@ -49,7 +49,7 @@ class TestEntity:
         assert Entity.Facets is None
 
     def test_init(self):
-        with patch('py_crunchbase.utils.DataDict.__init__') as super_init:
+        with patch('src.py_crunchbase.utils.DataDict.__init__') as super_init:
             data = {'a': 'A', 'b': 'B'}
             entity = Entity(data)
             assert entity._original_entity_data is not data
@@ -72,7 +72,7 @@ class TestEntity:
         assert Entity({}).entity_def_id == ''
 
     def test_web_url(self, entity):
-        with patch('py_crunchbase.entities.base.CB_WEBSITE_URL', 'cb_url'):
+        with patch('src.py_crunchbase.entities.base.CB_WEBSITE_URL', 'cb_url'):
             assert entity.web_url == os.path.join('cb_url', entity.entity_def_id, entity.permalink)
 
     def test_api_path(self):

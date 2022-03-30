@@ -6,9 +6,9 @@ from unittest.mock import MagicMock, patch
 import pytest
 import requests
 
-from py_crunchbase import constants, CrunchbaseAPIException
-from py_crunchbase.apis import CrunchbaseAPI
-from py_crunchbase.apis.base import extract_error_info
+from src.py_crunchbase import constants, CrunchbaseAPIException
+from src.py_crunchbase.apis import CrunchbaseAPI
+from src.py_crunchbase.apis.base import extract_error_info
 
 
 def complete_url(api: CrunchbaseAPI, path: str) -> str:
@@ -94,7 +94,7 @@ class TestCrunchbaseAPI:
     def test_send_request_not_ok(self):
         api = CrunchbaseAPI('api_key')
         with patch.object(requests, 'get', return_value=MockedResponse(ok=False, data={'not': 'ok'})):
-            with patch('py_crunchbase.apis.base.extract_error_info', return_value='problem') as extra_info:
+            with patch('src.py_crunchbase.apis.base.extract_error_info', return_value='problem') as extra_info:
                 with pytest.raises(api.Exception, match='problem'):
                     api.send_request('a_path')
         extra_info.assert_called_once_with({'not': 'ok'})

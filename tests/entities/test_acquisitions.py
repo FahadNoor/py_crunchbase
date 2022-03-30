@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.acquisitions import Acquisitions, AcquisitionCards, Acquisition
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.acquisitions import Acquisitions, AcquisitionCards, Acquisition
 
 
 def test_acquisitions():

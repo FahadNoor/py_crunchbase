@@ -3,11 +3,11 @@ from unittest.mock import patch, call
 
 import pytest
 
-from py_crunchbase import Entities
-from py_crunchbase.apis import CrunchbaseAPI
-from py_crunchbase.apis.entities.base_ import parse_cards, BaseEntitiesAPI
-from py_crunchbase.entities import Entity, BaseCards
-from py_crunchbase.utils import DataDict
+from src.py_crunchbase import Entities
+from src.py_crunchbase.apis import CrunchbaseAPI
+from src.py_crunchbase.apis.entities.base_ import parse_cards, BaseEntitiesAPI
+from src.py_crunchbase.entities import Entity, BaseCards
+from src.py_crunchbase.utils import DataDict
 
 
 class SampleEntity(Entity):
@@ -47,7 +47,7 @@ class TestBaseEntitiesAPI:
         assert BaseEntitiesAPI.CARDS_PATH == 'cards'
 
     def test_init(self):
-        with patch('py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
             api = BaseEntitiesAPI(entity_cls=Entity, api_key='be_api_key')
             super_init.assert_called_once_with(api_key='be_api_key')
             assert api.entity_cls is Entity
@@ -76,7 +76,7 @@ class TestBaseEntitiesAPI:
     def test__parse_response_data(self, api):
         entity_data = {'identifier': {'uuid': 'apple'}}
         data = {'cards': {BaseCards.fields: entity_data, 'card_1': ['a'], 'card_2': ['b']}}
-        with patch('py_crunchbase.apis.entities.base_.parse_cards', return_value={'cards': 'list'}) as _parse_cards:
+        with patch('src.py_crunchbase.apis.entities.base_.parse_cards', return_value={'cards': 'list'}) as _parse_cards:
             entity = api._parse_response_data(data)
         assert isinstance(entity, SampleEntity)
         assert dict(entity) == entity_data

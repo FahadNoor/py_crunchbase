@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.people import People, PersonCards, PersonFacets, Person
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.people import People, PersonCards, PersonFacets, Person
 
 
 def test_people():

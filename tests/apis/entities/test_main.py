@@ -2,8 +2,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from py_crunchbase.apis.entities.main import EntitiesAPIProxy
-from py_crunchbase.entities import Entity
+from src.py_crunchbase.apis.entities.main import EntitiesAPIProxy
+from src.py_crunchbase.entities import Entity
 
 
 class SampleEntity(Entity):
@@ -60,12 +60,12 @@ class TestEntitiesAPIProxy:
 
     def test_get_entities_api(self, api):
         entities_api = MagicMock()
-        with patch('py_crunchbase.apis.entities.main.EntitiesAPI', return_value=entities_api) as EntitiesAPI:
+        with patch('src.py_crunchbase.apis.entities.main.EntitiesAPI', return_value=entities_api) as EntitiesAPI:
             assert api.get_entities_api('1') is entities_api
             EntitiesAPI.assert_called_once_with(entity_id='1', entity_cls=api.entity_cls, api_key=api.api_key)
 
     def test_get_cards_api(self, api):
         cards_api = MagicMock()
-        with patch('py_crunchbase.apis.entities.main.CardsAPI', return_value=cards_api) as CardsAPI:
+        with patch('src.py_crunchbase.apis.entities.main.CardsAPI', return_value=cards_api) as CardsAPI:
             assert api.get_cards_api(entity_id='1', card_id='2') is cards_api
             CardsAPI.assert_called_once_with(entity_id='1', card_id='2', entity_cls=api.entity_cls, api_key=api.api_key)

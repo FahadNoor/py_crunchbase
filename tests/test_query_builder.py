@@ -2,8 +2,8 @@ from unittest.mock import patch
 
 import pytest
 
-from py_crunchbase import CrunchbaseAPIException
-from py_crunchbase.query_builder import BaseQueryBuilder
+from src.py_crunchbase import CrunchbaseAPIException
+from src.py_crunchbase.query_builder import BaseQueryBuilder
 
 
 class TestBaseQueryBuilder:

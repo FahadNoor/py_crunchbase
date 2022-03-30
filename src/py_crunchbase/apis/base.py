@@ -4,7 +4,7 @@ from typing import Union
 
 import requests
 
-from py_crunchbase import constants
+from src.py_crunchbase import constants
 
 
 class CrunchbaseAPIException(Exception):

@@ -2,8 +2,8 @@ from unittest.mock import patch, MagicMock, call
 
 import pytest
 
-from py_crunchbase import Entities
-from py_crunchbase.apis import AutoCompleteAPI, CrunchbaseAPI
+from src.py_crunchbase import Entities
+from src.py_crunchbase.apis import AutoCompleteAPI, CrunchbaseAPI
 
 
 class TestAutoCompleteAPI:
@@ -14,14 +14,14 @@ class TestAutoCompleteAPI:
         assert issubclass(AutoCompleteAPI, CrunchbaseAPI)
 
     def test_init(self):
-        with patch('py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
             api = AutoCompleteAPI('key_value')
         super_init.assert_called_once_with(api_key='key_value')
         assert api.query is None
         assert api.collection_ids == []
         assert api.limit_value == api.MAX_LIMIT
 
-        with patch('py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.CrunchbaseAPI.__init__') as super_init:
             AutoCompleteAPI()
         super_init.assert_called_once_with(api_key=None)
 

@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.funding_rounds import FundingRounds, FundingRoundCards, FundingRound
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.funding_rounds import FundingRounds, FundingRoundCards, FundingRound
 
 
 def test_funding_rounds():

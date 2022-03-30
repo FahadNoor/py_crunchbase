@@ -2,9 +2,9 @@ from unittest.mock import patch, PropertyMock
 
 import pytest
 
-from py_crunchbase.apis.entities.base_ import BaseEntitiesAPI
-from py_crunchbase.apis.entities.entities_ import EntitiesAPI
-from py_crunchbase.entities import Entity, BaseCards
+from src.py_crunchbase.apis.entities.base_ import BaseEntitiesAPI
+from src.py_crunchbase.apis.entities.entities_ import EntitiesAPI
+from src.py_crunchbase.entities import Entity, BaseCards
 
 
 class SampleEntity(Entity):
@@ -22,7 +22,7 @@ class TestEntitiesAPI:
         assert EntitiesAPI.ALL_FIELDS == '__ALL__'
 
     def test_init(self):
-        with patch('py_crunchbase.apis.entities.base_.BaseEntitiesAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.entities.base_.BaseEntitiesAPI.__init__') as super_init:
             with patch.object(EntitiesAPI, '_get_entity_id', return_value='2') as _get_entity_id:
                 api = EntitiesAPI(entity_id='1', entity_cls=SampleEntity, api_key='e_api_key')
                 super_init.assert_called_once_with(entity_cls=SampleEntity, api_key='e_api_key')

@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.locations import Locations, LocationCards, LocationFacets, Location
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.locations import Locations, LocationCards, LocationFacets, Location
 
 
 def test_locations():

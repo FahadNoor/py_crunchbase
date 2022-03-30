@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.ownerships import Ownerships, OwnershipCards, Ownership
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.ownerships import Ownerships, OwnershipCards, Ownership
 
 
 def test_ownerships():

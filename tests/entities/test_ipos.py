@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.ipos import Ipos, IpoCards, Ipo
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.ipos import Ipos, IpoCards, Ipo
 
 
 def test_ipos():

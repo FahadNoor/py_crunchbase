@@ -1,6 +1,6 @@
 from unittest.mock import patch, call
 
-from py_crunchbase.utils import is_iterable, falsy, DataDict, transform_to_data_dict
+from src.py_crunchbase.utils import is_iterable, falsy, DataDict, transform_to_data_dict
 
 
 def test_is_iterable():
@@ -68,7 +68,7 @@ class TestDataDict:
         assert issubclass(DataDict, dict)
 
     def test_init(self):
-        with patch('py_crunchbase.utils.transform_to_data_dict', side_effect=['v1', 'v2']) as mocked:
+        with patch('src.py_crunchbase.utils.transform_to_data_dict', side_effect=['v1', 'v2']) as mocked:
             data = {'a': 'A', 'b': 'B'}
             ins = DataDict(data)
             assert ins._original_data is data

@@ -1,6 +1,6 @@
-from py_crunchbase.decorators import override_entity
-from py_crunchbase.entities import Collection, BaseCards, Entities, Cards, Collections
-from py_crunchbase.entities.organizations import Organization
+from src.py_crunchbase.decorators import override_entity
+from src.py_crunchbase.entities import Collection, BaseCards, Entities, Cards, Collections
+from src.py_crunchbase.entities.organizations import Organization
 
 
 def test_override_entity():

@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.event_appearances import EventAppearances, EventAppearanceCards, EventAppearance
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.event_appearances import EventAppearances, EventAppearanceCards, EventAppearance
 
 
 def test_event_appearances():

@@ -2,10 +2,10 @@ from unittest.mock import patch, MagicMock, call
 
 import pytest
 
-from py_crunchbase.apis import SearchAPI, CrunchbaseAPI
-from py_crunchbase.apis.search.query_builder import SearchQueryBuilder
-from py_crunchbase.entities import Entity
-from py_crunchbase.paginator import Paginated
+from src.py_crunchbase.apis import SearchAPI, CrunchbaseAPI
+from src.py_crunchbase.apis.search.query_builder import SearchQueryBuilder
+from src.py_crunchbase.entities import Entity
+from src.py_crunchbase.paginator import Paginated
 
 
 class SampleEntity(Entity):
@@ -25,7 +25,7 @@ class TestSearchAPI:
 
     def test_init(self):
         qb = MagicMock()
-        with patch('py_crunchbase.apis.base.CrunchbaseAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.base.CrunchbaseAPI.__init__') as super_init:
             with patch.object(SampleEntity, 'api_path', return_value='sample_path'):
                 with patch.object(SearchAPI, 'get_query_builder', return_value=qb):
                     api = SearchAPI(entity_cls=SampleEntity, api_key='s_api_key')

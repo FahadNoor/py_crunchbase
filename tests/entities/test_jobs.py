@@ -1,5 +1,5 @@
-from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.entities.jobs import Jobs, JobCards, Job
+from src.py_crunchbase.entities import Collection, BaseCards, Entity
+from src.py_crunchbase.entities.jobs import Jobs, JobCards, Job
 
 
 def test_jobs():

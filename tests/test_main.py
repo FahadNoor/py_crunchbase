@@ -3,8 +3,8 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from py_crunchbase import PyCrunchbase
-from py_crunchbase.entities import Entity, Entities
+from src.py_crunchbase import PyCrunchbase
+from src.py_crunchbase.entities import Entity, Entities
 
 
 class SampleEntity(Entity):
@@ -26,19 +26,19 @@ class TestPyCrunchbase:
 
     def test_autocomplete_api(self, api):
         ac_api = MagicMock()
-        with patch('py_crunchbase.main.AutoCompleteAPI', return_value=ac_api) as AutoCompleteAPI:
+        with patch('src.py_crunchbase.main.AutoCompleteAPI', return_value=ac_api) as AutoCompleteAPI:
             assert api.autocomplete_api() == ac_api
             AutoCompleteAPI.assert_called_once_with(api_key=api.api_key)
 
     def test_deleted_entities_api(self, api):
         de_api = MagicMock()
-        with patch('py_crunchbase.main.DeletedEntitiesAPI', return_value=de_api) as DeletedEntitiesAPI:
+        with patch('src.py_crunchbase.main.DeletedEntitiesAPI', return_value=de_api) as DeletedEntitiesAPI:
             assert api.deleted_entities_api() == de_api
             DeletedEntitiesAPI.assert_called_once_with(api_key=api.api_key)
 
     def test__entities_api(self, api):
         e_api = MagicMock()
-        with patch('py_crunchbase.main.EntitiesAPI', return_value=e_api) as EntitiesAPI:
+        with patch('src.py_crunchbase.main.EntitiesAPI', return_value=e_api) as EntitiesAPI:
             assert api._entities_api(SampleEntity) == e_api
             EntitiesAPI.assert_called_once_with(SampleEntity, api_key=api.api_key)
 
@@ -65,7 +65,7 @@ class TestPyCrunchbase:
 
     def test__search_api(self, api):
         s_api = MagicMock()
-        with patch('py_crunchbase.main.SearchAPI', return_value=s_api) as SearchAPI:
+        with patch('src.py_crunchbase.main.SearchAPI', return_value=s_api) as SearchAPI:
             assert api._search_api(SampleEntity) == s_api
             SearchAPI.assert_called_once_with(SampleEntity, api_key=api.api_key)
 

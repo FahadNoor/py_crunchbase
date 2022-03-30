@@ -1,4 +1,4 @@
-from py_crunchbase import constants
+from src.py_crunchbase import constants
 
 
 def test_default_values():

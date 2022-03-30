@@ -1,2 +1,2 @@
 [run]
-source = py_crunchbase
+source = src.py_crunchbase

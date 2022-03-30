@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from py_crunchbase.paginator import Paginator, Paginated
+from src.py_crunchbase.paginator import Paginator, Paginated
 
 
 class TestPaginator:

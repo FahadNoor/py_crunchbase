@@ -2,10 +2,10 @@ from unittest.mock import patch, PropertyMock, MagicMock
 
 import pytest
 
-from py_crunchbase.apis.search.predicates import QueryValue, QueryListValue
-from py_crunchbase.apis.search.query_builder import convert_value, SearchQueryBuilder
-from py_crunchbase.entities import Entity
-from py_crunchbase.query_builder import BaseQueryBuilder
+from src.py_crunchbase.apis.search.predicates import QueryValue, QueryListValue
+from src.py_crunchbase.apis.search.query_builder import convert_value, SearchQueryBuilder
+from src.py_crunchbase.entities import Entity
+from src.py_crunchbase.query_builder import BaseQueryBuilder
 
 
 class SampleEntity(Entity):
@@ -16,7 +16,7 @@ def test_convert_value():
     av = QueryValue('a')
     assert convert_value(av) == QueryListValue([av])
 
-    with patch('py_crunchbase.entities.base.Entity.uuid', new_callable=PropertyMock, return_value='1234'):
+    with patch('src.py_crunchbase.entities.base.Entity.uuid', new_callable=PropertyMock, return_value='1234'):
         entity = SampleEntity({})
         assert convert_value(entity) == QueryListValue([QueryValue('1234')])
 
@@ -33,7 +33,7 @@ class TestSearchQueryBuilder:
         assert issubclass(SearchQueryBuilder, BaseQueryBuilder)
 
     def test_init(self):
-        with patch('py_crunchbase.query_builder.BaseQueryBuilder.__init__') as super_init:
+        with patch('src.py_crunchbase.query_builder.BaseQueryBuilder.__init__') as super_init:
             qb = SearchQueryBuilder(SampleEntity, 'a', b='b')
             assert qb.entity_cls is SampleEntity
             assert qb.queries == []
@@ -55,18 +55,18 @@ class TestSearchQueryBuilder:
         with pytest.raises(qb.Exception, match='Field and Operator should be provided in filed__operator format.'):
             qb.add_query('name_opr', 'test')
 
-        with patch('py_crunchbase.apis.search.query_builder.OPERATORS', ['eq']):
+        with patch('src.py_crunchbase.apis.search.query_builder.OPERATORS', ['eq']):
             with pytest.raises(qb.Exception, match='Invalid operator: neq'):
                 qb.add_query('name__neq', 'jojo')
 
-            with patch('py_crunchbase.apis.search.query_builder.convert_value', return_value='cv') as _convert_value:
+            with patch('src.py_crunchbase.apis.search.query_builder.convert_value', return_value='cv') as _convert_value:
                 qb.add_query('name__eq', 'jojo')
                 assert qb.queries == [('name', 'eq', 'cv')]
                 _convert_value.assert_called_once_with('jojo')
 
     def test_build(self, qb):
         _super = MagicMock(**{'build.return_value': {'a': 'b'}})
-        with patch('py_crunchbase.apis.search.query_builder.super', return_value=_super):
+        with patch('src.py_crunchbase.apis.search.query_builder.super', return_value=_super):
             assert qb.build() == {'a': 'b'}
 
             qb.fields = ['c', 'd']

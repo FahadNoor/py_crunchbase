@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
 
-from py_crunchbase.apis.search.predicates import OPERATORS, QueryValue, QueryListValue, Currency
+from src.py_crunchbase.apis.search.predicates import OPERATORS, QueryValue, QueryListValue, Currency
 
 
 def test_operators():
@@ -38,7 +38,7 @@ class TestCurrency:
         assert issubclass(Currency, QueryValue)
 
     def test_init(self):
-        with patch('py_crunchbase.apis.search.predicates.QueryValue.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.search.predicates.QueryValue.__init__') as super_init:
             cur = Currency(2)
             super_init.assert_called_once_with(2)
             assert cur.currency == 'USD'

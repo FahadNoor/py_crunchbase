@@ -2,11 +2,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from py_crunchbase.apis.entities.base_ import BaseEntitiesAPI
-from py_crunchbase.apis.entities.cards import Paginator, QueryBuilder, CardsAPI
-from py_crunchbase.entities import Entity
-from py_crunchbase.paginator import Paginator as BasePaginator, Paginated
-from py_crunchbase.query_builder import BaseQueryBuilder
+from src.py_crunchbase.apis.entities.base_ import BaseEntitiesAPI
+from src.py_crunchbase.apis.entities.cards import Paginator, QueryBuilder, CardsAPI
+from src.py_crunchbase.entities import Entity
+from src.py_crunchbase.paginator import Paginator as BasePaginator, Paginated
+from src.py_crunchbase.query_builder import BaseQueryBuilder
 
 
 class SampleEntity(Entity):
@@ -43,7 +43,7 @@ class TestQueryBuilder:
     def test_build(self):
         qb = QueryBuilder()
         params = {'a': 'b'}
-        with patch('py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params):
+        with patch('src.py_crunchbase.query_builder.BaseQueryBuilder.build', return_value=params):
             assert qb.build() == {'a': 'b'}
 
             qb.order = [('field', 'desc')]
@@ -68,7 +68,7 @@ class TestCardsAPI:
     def test_init(self):
         qb = MagicMock()
         entity_cls = SampleEntity
-        with patch('py_crunchbase.apis.entities.base_.BaseEntitiesAPI.__init__') as super_init:
+        with patch('src.py_crunchbase.apis.entities.base_.BaseEntitiesAPI.__init__') as super_init:
             with patch.object(CardsAPI, 'query_builder_cls', return_value=qb) as query_builder_cls:
                 with patch.object(CardsAPI, '_get_entity_id', return_value='1') as _get_entity_id:
                     api = CardsAPI(entity_id='2', card_id='3', entity_cls=entity_cls, api_key='c_api_key')
