@@ -15,7 +15,7 @@ PyCrunchbase supports all of these through a very simple interface.
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install PyCrunchbase.
 
 ```bash
-pip install py_crunchbase
+pip install py-crunchbase-api
 ```
 
 ## Usage
