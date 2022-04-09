@@ -1,4 +1,8 @@
 # PyCrunchbase
+[![Tests](https://github.com/FahadNoor/py_crunchbase/actions/workflows/run-test.yml/badge.svg)](https://github.com/FahadNoor/py_crunchbase/actions/workflows/run-test.yml)
+[![codecov](https://codecov.io/gh/FahadNoor/py_crunchbase/branch/main/graph/badge.svg?token=3DR7121OCM)](https://codecov.io/gh/FahadNoor/py_crunchbase)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI pyversions](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8%20%7C%203.9%20%7C%203.10-blue)](https://pypi.org/project/py-crunchbase-api/)
 
 PyCrunchbase is a python client for Crunchbase's [REST API](https://app.swaggerhub.com/apis-docs/Crunchbase/crunchbase-enterprise_api/1.0.3#/).
 Crunchbase provides 4 types of APIs:-
