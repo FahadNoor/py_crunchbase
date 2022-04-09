@@ -5,6 +5,7 @@
 *__pycache__*
 *.pyc
 .coverage
+coverage.xml
 .tox
 *.egg-info
 /dist
