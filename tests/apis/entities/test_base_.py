@@ -1,4 +1,3 @@
-import os.path
 from unittest.mock import patch, call
 
 import pytest
@@ -7,7 +6,7 @@ from py_crunchbase import Entities
 from py_crunchbase.apis import CrunchbaseAPI
 from py_crunchbase.apis.entities.base_ import parse_cards, BaseEntitiesAPI
 from py_crunchbase.entities import Entity, BaseCards
-from py_crunchbase.utils import DataDict
+from py_crunchbase.utils import DataDict, url_join
 
 
 class SampleEntity(Entity):
@@ -69,9 +68,9 @@ class TestBaseEntitiesAPI:
 
     def test__get_path(self, api):
         with patch.object(SampleEntity, 'api_path', return_value='sample_path'):
-            path = os.path.join(api.ENTITIES_PATH, 'sample_path', 'e1')
+            path = url_join(api.ENTITIES_PATH, 'sample_path', 'e1')
             assert api._get_path('e1') == path
-            assert api._get_path('e1', 'c1') == os.path.join(path, api.CARDS_PATH, 'c1')
+            assert api._get_path('e1', 'c1') == url_join(path, api.CARDS_PATH, 'c1')
 
     def test__parse_response_data(self, api):
         entity_data = {'identifier': {'uuid': 'apple'}}

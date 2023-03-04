@@ -1,9 +1,8 @@
-import os.path
 from typing import Type
 
 from ..base import CrunchbaseAPI
 from ...entities import Entity, Entities, BaseCards
-from ...utils import DataDict
+from ...utils import DataDict, url_join
 
 
 def parse_cards(cards: dict) -> DataDict:
@@ -31,9 +30,9 @@ class BaseEntitiesAPI(CrunchbaseAPI):
         return entity.uuid or entity.identifier.permalink or ''
 
     def _get_path(self, entity_id: str, card_id: str = None) -> str:
-        path = os.path.join(self.ENTITIES_PATH, self.entity_cls.api_path(), entity_id)
+        path = url_join(self.ENTITIES_PATH, self.entity_cls.api_path(), entity_id)
         if card_id:
-            path = os.path.join(path, self.CARDS_PATH, card_id)
+            path = url_join(path, self.CARDS_PATH, card_id)
         return path
 
     def _parse_response_data(self, data: dict) -> Entity:

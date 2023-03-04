@@ -1,6 +1,12 @@
 from unittest.mock import patch, call
 
-from py_crunchbase.utils import is_iterable, falsy, DataDict, transform_to_data_dict
+from py_crunchbase.utils import is_iterable, falsy, DataDict, transform_to_data_dict, url_join
+
+
+def test_url_join():
+    assert url_join() == ''
+    assert url_join('base.com', '/aa', 'bb/') == 'base.com/aa/bb'
+    assert url_join('/fruits.com/', '/apple/', '/banana/') == 'fruits.com/apple/banana'
 
 
 def test_is_iterable():

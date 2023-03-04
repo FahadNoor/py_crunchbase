@@ -1,4 +1,3 @@
-import os.path
 from unittest.mock import patch, MagicMock
 
 import pytest
@@ -7,7 +6,7 @@ from py_crunchbase.apis import CrunchbaseAPI
 from py_crunchbase.apis.deleted_entities.api import QueryBuilder, DeletedEntitiesAPI
 from py_crunchbase.paginator import Paginated
 from py_crunchbase.query_builder import BaseQueryBuilder
-from py_crunchbase.utils import DataDict
+from py_crunchbase.utils import DataDict, url_join
 
 
 class TestQueryBuilder:
@@ -58,7 +57,7 @@ class TestDeletedEntitiesAPI:
         assert api._get_path() is api.AUTOCOMPLETE_PATH
 
         api.collection_ids.append('c1')
-        assert api._get_path() == os.path.join(api.AUTOCOMPLETE_PATH, 'c1')
+        assert api._get_path() == url_join(api.AUTOCOMPLETE_PATH, 'c1')
 
         api.collection_ids.append('c2')
         assert api._get_path() is api.AUTOCOMPLETE_PATH

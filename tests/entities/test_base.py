@@ -1,10 +1,9 @@
-import os.path
 from unittest.mock import patch
 
 import pytest
 
 from py_crunchbase.entities import Collection, BaseCards, Entity
-from py_crunchbase.utils import DataDict
+from py_crunchbase.utils import DataDict, url_join
 
 
 class DogCollection(Collection):
@@ -73,7 +72,7 @@ class TestEntity:
 
     def test_web_url(self, entity):
         with patch('py_crunchbase.entities.base.CB_WEBSITE_URL', 'cb_url'):
-            assert entity.web_url == os.path.join('cb_url', entity.entity_def_id, entity.permalink)
+            assert entity.web_url == url_join('cb_url', entity.entity_def_id, entity.permalink)
 
     def test_api_path(self):
         with patch.object(Entity, 'Collection', 1):
