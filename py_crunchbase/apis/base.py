@@ -5,6 +5,7 @@ from typing import Union
 import requests
 
 from py_crunchbase import constants
+from ..utils import url_join
 
 
 class CrunchbaseAPIException(Exception):
@@ -47,7 +48,7 @@ class CrunchbaseAPI:
         helper method to send an API request
         :returns response dict/list or raises an exception
         """
-        url = os.path.join(self.API_URL, self.API_VERSION, path)
+        url = url_join(self.API_URL, self.API_VERSION, path)
         method = getattr(requests, method_name, requests.get)
 
         try:

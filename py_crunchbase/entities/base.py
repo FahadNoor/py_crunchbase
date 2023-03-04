@@ -1,9 +1,8 @@
 import copy
-import os.path
 from abc import ABCMeta, abstractmethod, ABC
 
 from ..constants import CB_WEBSITE_URL
-from ..utils import DataDict
+from ..utils import DataDict, url_join
 
 
 # Collection #
@@ -84,7 +83,7 @@ class Entity(DataDict):
 
     @property
     def web_url(self) -> str:
-        return os.path.join(CB_WEBSITE_URL, self.entity_def_id, self.permalink)
+        return url_join(CB_WEBSITE_URL, self.entity_def_id, self.permalink)
 
     @classmethod
     def api_path(cls) -> str:

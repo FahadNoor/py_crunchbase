@@ -1,10 +1,9 @@
-import os.path
 from typing import List
 
 from ..base import CrunchbaseAPI
 from ...paginator import Paginated
 from ...query_builder import BaseQueryBuilder
-from ...utils import DataDict
+from ...utils import DataDict, url_join
 
 
 class QueryBuilder(BaseQueryBuilder):
@@ -33,7 +32,7 @@ class DeletedEntitiesAPI(CrunchbaseAPI, Paginated):
 
     def _get_path(self) -> str:
         if len(self.collection_ids) == 1:
-            return os.path.join(self.AUTOCOMPLETE_PATH, self.collection_ids[0])
+            return url_join(self.AUTOCOMPLETE_PATH, self.collection_ids[0])
         return self.AUTOCOMPLETE_PATH
 
     def select_collections(self, *collection_ids: str) -> 'DeletedEntitiesAPI':

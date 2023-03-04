@@ -1,6 +1,13 @@
 from collections.abc import Iterable
 
 
+def url_join(*paths: str) -> str:
+    """
+    joins given paths to generate url
+    """
+    return '/'.join(path.strip('/') for path in paths)
+
+
 def is_iterable(obj) -> bool:
     """
     returns true if object is iterable (False for str)

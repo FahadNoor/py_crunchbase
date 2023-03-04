@@ -1,5 +1,4 @@
 import json
-import os
 import re
 from unittest.mock import MagicMock, patch
 
@@ -9,10 +8,11 @@ import requests
 from py_crunchbase import constants, CrunchbaseAPIException
 from py_crunchbase.apis import CrunchbaseAPI
 from py_crunchbase.apis.base import extract_error_info
+from py_crunchbase.utils import url_join
 
 
 def complete_url(api: CrunchbaseAPI, path: str) -> str:
-    return os.path.join(api.API_URL, api.API_VERSION, path)
+    return url_join(api.API_URL, api.API_VERSION, path)
 
 
 class MockedResponse:
